@@ -4,8 +4,11 @@
 * This data is from a multi-region study of women's midlife well-being and health.
 ** Provided by ICPSR -- Study of Women's health Across the Nation (SWAN) -- collected 2001 to 2003 **
 
+//again, have some writeup on what you are trying to do here: hypothesis, model, variables
+
 cd /Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/Stata/ProblemSet3
 
+//this wont load--need to load from online
 use "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/SWAN/DS0001/30501-0001-Data.dta" /* my data set was larger than 25mb and I'm not sure how to upload to github for online data upload*/
 
 outsheet using ps3.csv,  replace comma nolabel
