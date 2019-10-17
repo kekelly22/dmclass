@@ -1,0 +1,201 @@
+* Data Management ps2
+* Thursday, October 17th, 2019
+* Kristin Kelly
+* Data from ICSPR & The Arda */
+
+cd /Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/Stata
+
+use "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/Stata/ProblemSet3/SWAN_ps2.dta" /* my data set was larger than 25mb and I'm not sure how to upload to github for online data upload*/
+
+outsheet using ps3.csv,  replace comma nolabel
+save ps3.dta,  replace nolabel
+
+/***********/
+/* looking */
+/***********/
+
+edit 
+
+describe
+
+/***********/
+/*   PS2   */
+/***********/
+
+/****************************************************dropping***********************************************************************/
+//* dropping variables not pertinent to this analysis *//
+drop HRMDAY5 CYCDAY5 DHAS5 FSH5 SHBG5 T5 E2AVE5 FLGCV5 FLGDIF5 CVRDAY5 FLAGSER5 CHOLRES5 TRIGRES5 LDLRESU5 HDLRESU5 GLUCRES5 INSURES5 FACRESU5 FIBRESU5 PAIRESU5 TPARESU5 LPARESU5 LPA1RES5 APOARES5 APOBRES5 CRPRESU5 FLGCVRV5 SPSCDAY5 SPSCTIM5 SPSCMOD5 HPSCDAY5 HPSCTIM5 HPSCMOD5 SPBMDT5 HPBMDT5 //* dropping variables related to physiological/surgical health measures *//
+
+drop BMDFLG5 EFPVITD5 EFPB125 EFPTRAN5 EFPISOF5 EFPQUER5 EFPOMEG5 EFPCOPP5 EFPMANG5 EFPPANT5 EFPDFE5  EFPFOL5 EFPVITE5 EFPZINC5 EFPANZN5 EFPB65 EFPMG5 EFPACAR5 EFPBCAR5 EFPCRYP5 EFPLUT5 EFPLYC5 EFPRET5 EFPPROA5 EFPGENI5 EFPDAID5 EFPCOUM5 EFPAIUI5 EFPARE5 EFPB15 EFPPHOS5 FRUTWK5 FRUTMON5 FATWK5 FATMON5 ALCHWK5 ALCHMON5 VEGWK5 VEGMON5 GRANWK5 GRANMON5 MEATWK5 MEATMON5 DARYWK5 DARYMON5 FVWK5 FVMON5 DTTCOPP5 DTTMANG5 DTTPANT5 BATKCAL5 BATPROT5 BATTFAT5 BATCARB5 BATPHOS5 BATPOTS5 BATRIBO5 BATNIAC5 //* dropping variables related to nutritional health measures that I won't consider in this analysis *//
+
+drop PREVBLO5 EATDRIN5 BLDRWAT5 BLDDRAW5 SPEDAY5 ACOATW15 ACOATW25 HARTTW15 HARTTW25 CHOLTW15 CHOLTW25 BPTW15 BPTW25 DIURTW15 DIURTW25 THYRTW15 THYRTW25 INSUTW15 INSUTW25 NERVTW15 NERVTW25 STERTW15 STERTW25 FRTLTW15 FRTLTW25 BCPTWI15 BCPTWI25 ESTRTW15 ESTRTW25 EINJTW15 EINJTW25 COMBTW15 COMBTW25 PROGTW15 PROGTW25 OSTETW15 OSTETW25 ARTHTW15 ARTHTW25 OTHRTW15 OTHRTW25 PAINTW15 PAINTW25 SLEPTW15 SLEPTW25 OTCTW15 OTCTW25 OTCTW35 OTCTW45 OSTEOAR5 THYROID5 ANGINA5 OSTEOPR5 CANCERS5 SITESPE5 TAMOXIF5 CHEMOTH5 BROKEBO5 BONES15 HAPPEN15 BONES25 HAPPEN25 BONES35 HAPPEN35 DANDC5 NUMDAND5 HYSTERE5 HYSTDAY5 OOPHORE5 ONEOVAR5 ABLATIN5 UTERPRO5 THYRREM5 ENDO5 ENDODIF5 PELVCPN5 DIFPELV5 PROLAPS5 DIFPROL5 PELVCNC5 DIFCANC5 ABBLEED5 DIFBLED5 FIBRUTR5 DIFFIBR5 //* dropping variables related to blood draw and pharma health measures that I won't consider in this analysis *//
+
+/***************************************************^dropping^***********************************************************************/
+
+ta PRVIDER5, mi
+replace PRVIDER5=-9 if (PRVIDER5==.) //* Here I'm replacing any missing values for women's healthcare. Blank or missing answers are replaced with the appropriat value label*/
+recode PRVIDER5 (1 =1 "Do not have Wom Healthcare") (2 =2 "Have Wom Healthcare"), gen(WomHC) //* recoding to create a new variable specifically for all participants with or without women's healthcare.*//
+drop if WomHC == -1 
+drop if WomHC == -9 //* dropping participants if they did not have data for women's healthcare-- including missing, unknown and n/a answers *//
+bys PRVIDER5: egen FAILOTH5_POC=mean(FAILOTH5) //* creating a new variable to tell me the average lack of healthcare for POC versus non-POC *//
+
+ta ALCHL245, mi 
+replace ALCHL245=-9 if (ALCHL245==.) //* Here I'm replacing any missing values for alchohol use. Blank or missing answers are replaced with the appropriate value label*/
+
+ta HOTFLAS5, mi 
+replace HOTFLAS5=-9 if (HOTFLAS5==.) //* I'm replacing any missing values for # of hot flashes in the past 2 weeks. Blank or missing answers are replaced with the appropriate value label */
+
+ta RACE, mi //* checking to make sure all participants have a response for race*//
+recode RACE (1 =1 "POC") (2 =1 "POC") (3 =1 "POC") (5 =1 "POC") (4 =0 "Non-POC"), gen(POC) //* recoding to create a new variable specifically for all people of color (POC) and then white/caucasian people *//
+
+bys POC: egen FAILOTH5_POC=mean(FAILOTH5) //* creating a new variable to tell me the average lack of healthcare for POC versus non-POC *//
+
+rename AGE5 C1PRAGE
+ta C1PRAGE 
+recode C1PRAGE (0/49 =1 "Under 50yo") (50/100 =2 "Over 50yo"), gen(AgeGroup) //* recoding to create a new variable specifically for women over or under 50 years old *//
+
+keep AGE5 RACE ALCHL245 QLTYLIF5 FAILOTH5 SMOKERE5 PHYSACT5 WALKBIK5 SLEEPQL5 ENGAGSE5 WEIGHT5 BMI5 DTTKCAL5 DTTPROT5 DTTCARB5 DTTFAT5 DTTCAFF5 FAILOTH5_POC POC WomHC C1PRAGE AgeGroup/* this is where I finally realized what I wanted to keep*/
+
+drop if SMOKERE5==. /*dropping obs missing data on smoking habits*/
+
+drop AGE5 
+
+////* Bringing in new data set to clean and merge *////
+use "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/MIDUS3/DS0001/36346-0001-Data.dta"
+(Midlife in the United States (MIDUS 3), 2013-2014, Aggregate Data)
+
+keep M2ID M2FAMNUM SAMPLMAJ C1PRAGE C1PRSEX C1PA1 C1PA2 C1PA3 /*keeping the variables that I want to compare*/
+
+drop if C1PRSEX == 1 /* dropping male observations*/
+
+bys C1PRAGE: egen Avg_PhysH = mean(C1PA1)
+bys C1PRAGE: egen Avg_MentH = mean(C1PA2)
+bys C1PRAGE: egen Avg_HeaComp = mean(C1PA3) /* I created new variables with average self-evaluations of physical, mental, and comparison health for women by age */
+
+collapse Avg_PhysH Avg_MentH Avg_HeaComp, by(C1PRAGE /* creating unique variables for average reports of physical, mental, and comparison health for women by age*/
+
+rename AGE5 C1PRAGE /*making sure age var have the same name*/
+
+save MIDUS_ps3.dta
+
+merge m:1 C1PRAGE using MIDUS_ps3.dta
+
+ta _merge
+drop if _merge!=3
+drop _merge
+
+/***********/
+/*   PS3   */
+/***********/
+
+
+/* MERGE #3: merging in data from Behavioral Risk Factor Surveillance System (BRFSS), 2003 -- merging in the average BMI-overweight and obese groups and health risk factors by age -- from ICPSR */
+
+use "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/ICPSR_34085/DS0001/34085-0001-Data.dta" /*(Behavioral Risk Factor Surveillance System (BRFSS), 2003)*/
+
+drop if NUMWOMEN < 1 /* dropping observations from male-only households or male participants*/
+drop if SEX==1
+
+keep IYEAR NUMMEN NUMWOMEN GENHLTH MARITAL EDUCA EMPLOY INCOME2 WEIGHT SEX RFHLTH BMI3CAT IMPAGE
+
+drop if IMPAGE==99 /* dropping if age is unknown or missing */
+
+recode IMPAGE (0/49 =1 "Under 50yo") (50/100 =2 "Over 50yo"), gen(AgeGroup) //* recoding to create a new variable specifically for women over or under 50 years old *//
+
+rename IMPAGE C1PRAGE /* renaming age var to match between data sets */
+
+bys C1PRAGE: egen Avg_BMIgroup = mean(BMI3CAT)
+bys C1PRAGE: egen Avg_HealthRiskFac = mean(RFHLTH) /* I created new variables with average BMI group and risk factors for women by age */
+
+drop if C1PRAGE<46
+drop if C1PRAGE>58 /* dropping the obs from women younger or older than the age range of my current data set... in future management/merging would I be better off starting with one of these higher range data sets first?? */
+
+collapse Avg_BMIgroup Avg_HealthRiskFac, by(C1PRAGE) /* creating unique variables for average reports of physical, mental, and comparison health for women by age*/
+
+save BRFSS_ps3_.dta
+
+merge C1PRAGE using BRFSS_ps3.dta
+
+ta _merge
+drop if _merge!=3
+drop _merge
+
+drop NUMMEN NUMWOMEN
+
+rename EDUCA Education 
+recode Education (1 =1 "No Education") (2/3 =2 "Primary Education") (4 =3 "Secondary Education (High School)") (5/6 =4 "University degree/equivalent"), gen (EducationLevel) //* recoding to create a new variable specifically for all participants with or without women's healthcare.*//
+
+
+/* END MERGE #3 */
+
+/* MERGE #4: merging in data from "Voice of the People" international data collection, 2003 -- found on ICSPR */
+
+use "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/ICPSR_24482/DS0001/24482-0001-Data.dta"
+(Voice of the People, 2003)
+
+keep COUNTRY Q5 D1 D2 D3 D4 D5 D6
+
+save "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/Stata/ProblemSet3/VoiceofthePeople_ps3.dta"
+file /Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/Stata/ProblemSet3/VoiceofthePeople_ps3.dta saved
+
+drop if COUNTRY!=80
+drop if D1!=2
+
+rename D1 Gender
+rename D2 C1PRAGE
+drop if C1PRAGE==4
+rename D3 Education
+
+recode C1PRAGE (1/2 =1 "Under 50yo") (3 =2 "Over 50yo"), gen(AgeGroup) //* recoding to create a new variable specifically for women over or under 50 years old *//
+
+bys Education AgeGroup: egen Avg_ProspNextGen = mean(Q5)
+
+collapse Avg_ProspNextGen, by(Education AgeGroup) /* creating unique variables for average reports of physical, mental, and comparison health for women by age*/
+
+drop if Education==5
+
+rename Education EducationLevel
+
+save VOP_ps3_.dta
+
+merge m:1 EducationLevel AgeGroup using VOP_ps3_.dta
+
+drop if _merge!=3
+drop _merge
+
+/* END MERGE #4 */
+
+/* MERGE #5: merging in data from the General Social Survey, 2016 -- found on The Arda */
+
+use "/Users/kristinkelly/Downloads/General Social Survey, 2016.DTA"
+
+keep age agekdbrn sex parborn granborn pillok premarsx
+
+save "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/Stata/ProblemSet3/GSS16_ps3.dta"
+
+drop if sex==1
+drop sex
+ 
+rename age Age
+
+recode Age (0/49 =1 "Under 50yo") (50/100 =2 "Over 50yo"), gen(AgeGroup) //* recoding to create a new variable specifically for women over or under 50 years old *//
+
+drop if premars==0
+
+bys Age: egen Avg_MoralPrMaSex = mean(premarsx)
+
+collapse Avg_MoralPrMaSex, by(Age) /* creating unique variables for average reports of physical, mental, and comparison health for women by age*/
+
+save GSS16_ps3.dta, replace
+
+use "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/Stata/ProblemSet3/ps3.dta"
+rename C1PRAGE Age
+
+merge 1:m Age using GSS16_ps3.dta
+
+/* END MERGE #5 */
+
+
+/* I'm so confused with why I would/should reshape and how to do that with this dataset... I guess I'm not sure what sort of variables I'm using that would be more useful being reshaped */
+
+/* I just saw your email about zip files/uploading data sets and I'm hoping to re-up my code to reflect what I can learn from the links you provided. I ran out of time ot try and incorporate them before class tonight. */
