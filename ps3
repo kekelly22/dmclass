@@ -1,10 +1,13 @@
 * Data Management ps2
 * Thursday, October 17th, 2019
 * Kristin Kelly
-* Data from ICSPR & The Arda */
+* Data from ICSPR & The Arda */ //cool! love these data!!but need to be way more specific like give exact dataset names and url to it so i can easily find it online
+//need to say version of stata and clear memory
+//need like a paragraph about what you are doing here and whats the hypothesis, model, variables
 
 cd /Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/Stata
 
+//none of this runs because you didnt put data onlike
 use "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/Stata/ProblemSet3/SWAN_ps2.dta" /* my data set was larger than 25mb and I'm not sure how to upload to github for online data upload*/
 
 outsheet using ps3.csv,  replace comma nolabel
