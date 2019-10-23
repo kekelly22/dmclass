@@ -1,7 +1,18 @@
 * Data Management ps2
 * Thursday, October 17th, 2019
 * Kristin Kelly
-* Data from ICSPR & The Arda */ //cool! love these data!!but need to be way more specific like give exact dataset names and url to it so i can easily find it online
+* Stata version 16
+/* Data from ICSPR & The Arda:
+* First data set - ICSPR: Study of Women's Health Across the Nation (SWAN), 2001-2003: Visit 05
+Dataset
+* Second data set - ICSPR: Midlife in the United States (MIDUS) Series, 2013-2014
+* Third data set - ICSPR: Behavioral Risk Factor Surveillance System (BRFSS), 2003. 
+"The Behavioral Risk Factor Surveillance System (BRFSS) is a state-based system of health surveys that collects 
+information on health risk behaviors, preventive health practices, and health care access primarily related to 
+chronic disease and injury. For many states, the BRFSS is the only available source of timely, accurate data on health-related behaviors.
+* Fourth data set - ICSPR: */ 
+
+//cool! love these data!!but need to be way more specific like give exact dataset names and url to it so i can easily find it online
 //need to say version of stata and clear memory
 //need like a paragraph about what you are doing here and whats the hypothesis, model, variables
 
