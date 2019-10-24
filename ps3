@@ -1,19 +1,52 @@
 * Data Management ps2
 * Thursday, October 17th, 2019
+* Resubmission: Thursday, October 24th, 2019
 * Kristin Kelly
 * Stata version 16
+
+/***********/
+/* DATA */
+/***********/
+
 /* Data from ICSPR & The Arda:
+
 * First data set - ICSPR: Study of Women's Health Across the Nation (SWAN), 2001-2003: Visit 05
-Dataset
-* Second data set - ICSPR: Midlife in the United States (MIDUS) Series, 2013-2014
+Dataset. 
+"The Study of Women's Health Across the Nation (SWAN), is a multisite longitudinal, epidemiologic 
+study designed to examine the health of women during their middle years. The study examines the physical, 
+biological, psychological, and social changes during this transitional period."
+
+* Second data set - ICSPR: Midlife in the United States (MIDUS) Series, 2013-2014.
+"In 1995-1996, the MacArthur Midlife Research Network carried out a national survey of over 7,000 Americans 
+aged 25 to 74 [ICPSR 2760]. The purpose of the study was to investigate the role of behavioral, psychological, and social 
+factors in understanding age-related differences in physical and mental health."
+
 * Third data set - ICSPR: Behavioral Risk Factor Surveillance System (BRFSS), 2003. 
 "The Behavioral Risk Factor Surveillance System (BRFSS) is a state-based system of health surveys that collects 
 information on health risk behaviors, preventive health practices, and health care access primarily related to 
 chronic disease and injury. For many states, the BRFSS is the only available source of timely, accurate data on health-related behaviors.
-* Fourth data set - ICSPR: */ 
 
-//cool! love these data!!but need to be way more specific like give exact dataset names and url to it so i can easily find it online
-//need to say version of stata and clear memory
+* Fourth data set - ICSPR: Voice of the People, 2003. 
+"This annual survey, fielded November 2003 to January 2004, was conducted in over 50 countries to 
+solicit public opinion on social and political issues."
+
+* Fifth data set - The Arda: General Social Survey, 2016.
+"the General Social Survey (GSS) has been monitoring societal change and studying the growing complexity of American society."
+*/ 
+
+/**************/
+/* HYPOTHESES */
+/**************/
+/* I started with the SWAN dataset on middle-age American women because I was interested in looking into health relations that may 
+occur uniquely among that demographic. I decided to merge in more health data points, such as obesity markers, overall physical/mental health
+ratings, health comparison reports, fitness levels, and average education levels, from the four additional datasets. 
+My general hypotheses include:
+* Women with higher reports of health comparison will also engage in more physical activity compared to women who report lower health comparisons.
+* Women with higher reports of physical activity will correlate with less consumption of sweets on a daily basis.
+* Women with higher reports of physical health will correlate with higher reports of mental health.
+* BMI will reflect a positive relation to age, until women surpass the age of ~60 years and then BMI will begin to negatively correleate.
+A lot of health correlations could be drawn from these datasets, but these hypotheseses reflect my first questions for the data.
+
 //need like a paragraph about what you are doing here and whats the hypothesis, model, variables
 
 cd /Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/Stata
@@ -21,7 +54,11 @@ cd /Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/
 //none of this runs because you didnt put data onlike
 use "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/Stata/ProblemSet3/SWAN_ps2.dta" /* my data set was larger than 25mb and I'm not sure how to upload to github for online data upload*/
 
+
+insheet using https://github.com/CityOfPhiladelphia/community-health-explorer/raw/gh-pages/_data/2017/citywide_over_time.csv ,clear
+
 outsheet using ps3.csv,  replace comma nolabel
+save ps3.dta,  replace nolabel
 save ps3.dta,  replace nolabel
 
 /***********/
