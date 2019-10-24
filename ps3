@@ -142,7 +142,15 @@ drop _merge
 /****************/
 /* MERGE #3: merging in data from Behavioral Risk Factor Surveillance System (BRFSS), 2003 -- merging in the average BMI-overweight and obese groups and health risk factors by age -- from ICPSR */
 
-use "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/ICPSR_34085/DS0001/34085-0001-Data.dta" /*(Behavioral Risk Factor Surveillance System (BRFSS), 2003)*/
+insheet using https://github.com/kekelly22/dmclass/blob/master/BRFSS.dta.zip
+
+/* It took me forever to figure out- but I figured out how to clone my repository and have a local 
+version on my laptop. Then I figured out how upload a zip file from my computer to github when it's more than 25mb. I know
+you probably already know this, but you can upload data files over 25mb (but not larger than 100mb) to GitHub if you upload them
+through the command in your computer's command prompt (for my Mac it's called terminal). It took a million articles and tutorials
+but I finally got my biggest data set to upload this way! If it would be helpful, I could take the time to type up how I did 
+this for my classmates/future students to use to upload bigger data sets to GitHub. One of the key articles I used is here:
+https://help.github.com/en/github/managing-files-in-a-repository/adding-a-file-to-a-repository-using-the-command-line */
 
 drop if NUMWOMEN < 1 /* dropping observations from male-only households or male participants*/
 drop if SEX==1
