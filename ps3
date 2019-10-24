@@ -1,4 +1,4 @@
-* Data Management ps2
+* Data Management ps3
 * Thursday, October 17th, 2019
 * Resubmission: Thursday, October 24th, 2019
 * Kristin Kelly
@@ -50,7 +50,7 @@ A lot of health correlations could be drawn from these datasets, but these hypot
 
 cd /Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/Stata
 
-insheet using https://github.com/kekelly22/dmclass/blob/master/SWAN.dta, clear
+use "https://github.com/kekelly22/dmclass/blob/master/SWAN.dta?raw=true", clear
 
 outsheet using ps3.csv,  replace comma nolabel
 save ps3.dta,  replace nolabel
