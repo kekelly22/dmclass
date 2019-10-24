@@ -106,12 +106,14 @@ drop if SMOKERE5==. /*dropping obs missing data on smoking habits*/
 
 drop AGE5 
 
+save ps3.dta, clear
+
 /******************/
 /* merge: MIDUS */
 /******************/
 
-insheet using https://github.com/kekelly22/dmclass/blob/master/MIDUS3.dta, clear
-save MIDUS_ps3.dta, clear
+use "https://github.com/kekelly22/dmclass/blob/master/MIDUS3.dta?raw=true", clear
+save MIDUS_ps3.dta, replace
 
 keep M2ID M2FAMNUM SAMPLMAJ C1PRAGE C1PRSEX C1PA1 C1PA2 C1PA3 /*keeping the variables that I want to compare*/
 
@@ -125,13 +127,15 @@ collapse Avg_PhysH Avg_MentH Avg_HeaComp, by(C1PRAGE /* creating unique variable
 
 rename AGE5 C1PRAGE /*making sure age var have the same name*/
 
-save MIDUS_ps3.dta
+save MIDUS_ps3.dta, replace
 
 merge m:1 C1PRAGE using MIDUS_ps3.dta
 
 ta _merge
 drop if _merge!=3
 drop _merge
+
+save ps3.dta, clear
 
 /***********/
 /*   PS3   */
@@ -142,7 +146,7 @@ drop _merge
 /****************/
 /* MERGE #3: merging in data from Behavioral Risk Factor Surveillance System (BRFSS), 2003 -- merging in the average BMI-overweight and obese groups and health risk factors by age -- from ICPSR */
 
-insheet using https://github.com/kekelly22/dmclass/blob/master/BRFSS.dta.zip
+using "https://github.com/kekelly22/dmclass/blob/master/BRFSS.dta.zip?raw=true", clear
 
 /* It took me forever to figure out- but I figured out how to clone my repository and have a local 
 version on my laptop. Then I figured out how upload a zip file from my computer to github when it's more than 25mb. I know
@@ -173,7 +177,7 @@ collapse Avg_BMIgroup Avg_HealthRiskFac, by(C1PRAGE) /* creating unique variable
 
 save BRFSS_ps3_.dta
 
-merge C1PRAGE using BRFSS_ps3.dta
+merge C1PRAGE using BRFSS_ps3_.dta
 
 ta _merge
 drop if _merge!=3
@@ -184,6 +188,7 @@ drop NUMMEN NUMWOMEN
 rename EDUCA Education 
 recode Education (1 =1 "No Education") (2/3 =2 "Primary Education") (4 =3 "Secondary Education (High School)") (5/6 =4 "University degree/equivalent"), gen (EducationLevel) //* recoding to create a new variable specifically for all participants with or without women's healthcare.*//
 
+save ps3.dta, clear
 
 /* END MERGE #3 */
 
@@ -195,8 +200,7 @@ recode Education (1 =1 "No Education") (2/3 =2 "Primary Education") (4 =3 "Secon
 
 /* MERGE #4: merging in data from "Voice of the People" international data collection, 2003 -- found on ICSPR */
 
-insheet using https://github.com/kekelly22/dmclass/blob/master/VoiceOfThePeople.dta, clear
-save VOP_ps3.dta, clear
+use "https://github.com/kekelly22/dmclass/blob/master/VoiceOfThePeople.dta?raw=true", clear
 
 keep COUNTRY Q5 D1 D2 D3 D4 D5 D6
 
@@ -228,6 +232,8 @@ merge m:1 EducationLevel AgeGroup using VOP_ps3_.dta
 drop if _merge!=3
 drop _merge
 
+save ps3.dta, clear
+
 /* END MERGE #4 */
 
 /**************/
@@ -235,8 +241,7 @@ drop _merge
 /**************/
 /* MERGE #5: merging in data from the General Social Survey, 2016 -- found on The Arda */
 
-insheet using https://github.com/kekelly22/dmclass/blob/master/General%20Social%20Survey%2C%202016.DTA, clear
-save GSS16_ps3.dta, clear
+use "https://github.com/kekelly22/dmclass/blob/master/General%20Social%20Survey,%202016.DTA?raw=true", clear
 
 keep age agekdbrn sex parborn granborn pillok premarsx
 
@@ -261,6 +266,8 @@ use "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagemen
 rename C1PRAGE Age
 
 merge 1:m Age using GSS16_ps3.dta
+
+save ps3.dta, clear
 
 /* END MERGE #5 */
 
