@@ -1,3 +1,8 @@
+//good! there's progress! BUT:
+//datasets to be merged should be 2 different not just collapsing and merging with the same
+//should have emailed me earlier about reshape
+//we should meet outside of the class to go over this
+
 * Data Management ps3
 * Thursday, October 17th, 2019
 * Resubmission: Friday, October 25th, 2019
@@ -33,6 +38,7 @@ solicit public opinion on social and political issues."
 * Fifth data set - The Arda: General Social Survey, 2016.
 "the General Social Survey (GSS) has been monitoring societal change and studying the growing complexity of American society."
 */ 
+//good
 
 /**************/
 /* HYPOTHESES */
@@ -50,7 +56,7 @@ A lot of health correlations could be drawn from these datasets, but these hypot
 * Higher caloric intake will not be significantly related to BMI.
 * Women who report higher QOL will correlate with higher reports of Avg Physical and Mental health.
 */
-
+//good
 mkdir ~\kristinkellyPS3
 cd ~\kristinkellyPS3
 
