@@ -25,10 +25,12 @@ I have half a dozen other datasets to pick from to create my final master set. I
 /******************/
 /*     LOOKING    */
 /******************/
+mkdir ~\kristinkellyPS5
+cd ~\kristinkellyPS5
 
 * bringing in data set #1: CDC 500 cities data (details above)
 insheet using "https://github.com/kekelly22/dmclass/blob/master/500cities.csv?raw=true", clear
-
+edit
 keep if placename=="Philadelphia"
 *376 observations left in dataset, data specific to Philadelphia
 
@@ -70,6 +72,7 @@ save 500cities, replace
 
 clear
 insheet using "http://data-phl.opendata.arcgis.com/datasets/8bc0786524a4486bb3cf0f9862ad0fbf_0.csv"
+edit
 rename geoid10 tractfips /* for merging purposes */
 keep tractfips intptlat10 intptlon10 /*keeping geo ID for merging and XY coord to strengthen other geo data with merge */
 rename intptlat10 latitude
