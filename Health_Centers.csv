@@ -1,0 +1,56 @@
+﻿X,Y,OBJECTID,NAME,ORGANIZATION,ZIP,PHONE,WEBSITE,DENTAL_PHONE,FULL_ADDRESS
+-75.137491161448054,39.999633703260116,1,Maria de los Santos Health Center,DVCH,19133,215-291-2500,http://dvch.org/locations/maria-de-los-santos-health-center/,215-291-2509,401 West Allegheny Ave
+-75.137455019559184,39.999601254817691,2,Maria de los Santos Women's Health Center,DVCH,19133,215-291-2500,http://dvch.org/locations/maria-de-los-santos-womens-health-center/,N/A,"400 West Allegheny Ave, Unit B-5"
+-75.110819592132486,40.011925500122274,3,Parkview OB/Gyn & Podiatry Services,DVCH,19124,215-537-7695,http://dvch.org/locations/parkview-health-center/,N/A,"841 E. Hunting Park Avenue, 2nd Floor"
+-75.149982686261737,39.970508676492564,4,Fairmount Primary Care Center at Girard Medical Center,DVCH,19122,215-827-8010,http://dvch.org/locations/fairmount-primary-care-center-at-girard-medical-center/,N/A,801 W. Girard Ave
+-75.114106199769481,39.996113091770134,5,K&A,Esperanza,19134,215-302-3600,http://esperanzahealth.com/wp/,215-302-3156,3156 Kensington Ave 
+-75.140917877805251,39.988854372999036,6,Esperanza Health Center  (Fifth Street),Esperanza,19133,215-302-3600,http://esperanzahealth.com/wp/,N/A,2490 North 5th Street 
+-75.13694858458679,40.018893421962147,7,Hunting Park,Esperanza,19140,215-302-3600,http://esperanzahealth.com/wp/,N/A,4417 N. 6th Street
+-75.229736538308785,39.928800320424891,8,The Health Annex,FPCN,19142,215-727-4721,https://www.fpcn.com/health-annex/,215-727-4721,6120B Woodland Avenue
+-75.154832047048771,39.967750629345197,9,11th Street Family Health Services,FPCN,19123,215-769-1100,https://www.fpcn.com/stephen-and-sandra-sheller-11th-street-family-health-services-of-drexel-university/,215-769-1100,850 North 11th Street
+-75.172178495065992,40.017457307774976,10,Abbotsford Falls  Family Practice and Counseling,FPCN,19144,215-843-9720,https://www.fpcn.com/abbottsford-falls/,215-843-9720,"4700 Wissahickon Ave, Building D"
+-75.175241960095533,40.011195281266133,11,Fast Family Care,FPCN,19129,267-597-3610,https://www.fpcn.com/Fast-Family-Care/,N/A,"2800 Fox Street, In Shoprite"
+-75.199692044153934,39.956892034215755,12,Annex West Health Center,FPCN,19104,267-350-5150,https://www.fpcn.com/annex-west-health-center/,N/A,"3901 Market Street, (40th and Filbert on Filbert Street)"
+-75.213875336979015,39.939959257126588,13,Woodland Avenue Health Center,GPHA,19143,215-726-9807,http://www.gphainc.org/sitesList.asp,215-726-9807,5000 Woodland Avenue
+-75.156929532544638,39.935944420024057,14,Southeast Health Center,GPHA,19147,215-339-5100,http://www.gphainc.org/sitesList.asp,215-339-5100,800 Washington Avenue 
+-75.148592657294444,39.959338591462448,15,Chinatown Medical Services & Chinatown Dental Services,GPHA,19123,215-627-8000,http://www.gphainc.org/sitesList.asp,215-627-8000,432 N. 6th Street
+-75.151585022115881,39.930776998849332,16,4th Street Behavioral Healthcare,GPHA,19147,215-339-1070,http://www.gphainc.org/sitesList.asp,N/A,1401 South 4th Street
+-75.151585022115881,39.930776998849332,17,4th Street Medical Suite,GPHA,19147,215-339-1079,http://www.gphainc.org/sitesList.asp,N/A,1401 South 4th Street
+-75.086350322191436,40.013902430758151,18,Frankford Avenue Behavioral Healthcare Location,GPHA,19124,215-831-9882,http://www.gphainc.org/sitesList.asp,N/A,"4500-10 Frankford Avenue, 2nd Floor"
+-75.086350322191436,40.013902430758151,19,Frankford Avenue Health Center & Frankford Avenue Dental Center,GPHA,19124,215-535-1990,http://www.gphainc.org/sitesList.asp,215-535-1990,4500-10 Frankford Avenue
+-75.220380578886235,39.935411395921264,20,"Greater Philadelphia Health Action, Inc. Dental and Behavorial Healthcare",GPHA,19143,215-724-4700,http://www.gphainc.org/sitesList.asp,215-724-4700,5501 Woodland Avenue
+-75.157959362634628,39.922856414067333,21,Snyder Avenue Dental Center,GPHA,19148,215-334-4900,http://www.gphainc.org/sitesList.asp,215-334-4900,640 Snyder Avenue
+-75.160936501333737,40.012676995604693,22,Hunting Park Health & Hunting Park Dental Center ,GPHA,19140,215-228-9300,http://www.gphainc.org/sitesList.asp,215-229-1390,1999 W. Hunting Park Avenue
+-75.195432462316731,39.936450177644105,23,Carl Moore Health Center,GPHA,19146,215-755-7700,http://www.gphainc.org/sitesList.asp,215-755-6866,1401 S. 31st Street
+-75.152765476956105,40.002213749066634,24,GPHA Medical Suite at Temple University Kornberg School of Dentistry,GPHA,19140,215-226-3789,http://www.gphainc.org/sitesList.asp,N/A,"3223 N. Broad Street, Suite 136, 1st Floor"
+-75.16871247375407,39.929249794407824,25,Health Center 2,PDPH,19145,215-685-1803,https://beta.phila.gov/services/mental-physical-health/city-health-centers/,215-685-1822,"1700 S. Broad Street, Unit 201"
+-75.209140430154207,39.948981672474901,26,Health Center 3,PDPH,19104,215-685-7504,https://beta.phila.gov/services/mental-physical-health/city-health-centers/,215-685-7506,555 S. 43rd Street
+-75.21063852600787,39.962571896614001,27,Health Center 4,PDPH,19104,215-685-7601,https://beta.phila.gov/services/mental-physical-health/city-health-centers/,215-685-7605,4400 Haverford Avenue
+-75.166770773391335,39.982998512469685,28,Health Center 5,PDPH,19121,215-685-2933,https://beta.phila.gov/services/mental-physical-health/city-health-centers/,215-685-2938,1900 N. 20th Street
+-75.142344438030477,39.969885478362201,29,Health Center 6,PDPH,19123,215-685-3803,https://beta.phila.gov/services/mental-physical-health/city-health-centers/,215-685-3816,321 W. Girard Avenue
+-75.172771798886558,40.037769224744792,30,Health Center 9,PDPH,19144,215-685-5701,https://beta.phila.gov/services/mental-physical-health/city-health-centers/,215-685-5738,131 E. Chelten Avenue
+-75.061344645275966,40.04855869695632,31,Health Center 10,PDPH,19149,215-685-0639,https://beta.phila.gov/services/mental-physical-health/city-health-centers/,215-685-0608,2230 Cottman Avenue
+-75.179548361817524,39.990925996387233,32,Strawberry Mansion Health Center,PDPH,19132,215-685-2401,https://beta.phila.gov/services/mental-physical-health/city-health-centers/,N/A,2840 W. Dauphin Street
+-75.160503307458256,39.950455315130185,33,John Bell Health Center and Dental Clinic,Philadelphia Fight,19107,267-725-0252,https://fight.org/programs/john-bell-center/,215-525-3046,"1207 Chestnut Street, Floor 3"
+-75.162188991524843,39.947934958998566,34,Jonathan Lax Treatment Center,Philadelphia Fight,19107,215-790-1788,https://fight.org/programs/lax-center/,N/A ,"1233 Locust Street, 4th Floor"
+-75.139279593150647,39.991966899391031,35,Congreso Health Center,PHMC,19133,267-765-2272,http://www.phmchealthnetwork.org/2013-09-17-02-33-38,N/A,412 W. Lehigh Avenue
+-75.158362953674128,39.959114352316405,36,PHMC Care Clinic,PHMC,19123,215-825-8220,http://www.phmchealthnetwork.org/2013-09-17-02-32-24,N/A,"1200 Callowhill Street, Suite 101"
+-75.155638731425753,39.949047016135225,37,Mary Howard Health Center,PHMC,19107,215-592-4500,http://www.phmchealthnetwork.org/2013-09-17-02-33-00,N/A,125 S. 9th Street
+-75.14877436141073,39.980675861948455,38,PHMC Health Connection,PHMC,19122,215-765-6690,http://www.phmchealthnetwork.org/2013-09-17-02-31-51,N/A,1900 N. 9th Street
+-75.121160707246148,40.036369951921301,39,Rising Sun Health Center,PHMC,19120,215-279-9666,http://www.phmchealthnetwork.org/2013-09-17-02-29-05,N/A,5675 N. Front Street
+-75.152210886076517,40.004741143014179,40,PHMC Health Center at Temple,PHMC,19140,215-731-7144,http://www.phmchealthnetwork.org/phmc-health-center-at-temple,N/A,"3401 N. Broad Street, Suite D101"
+-75.170849398367295,39.980361445508727,41,Stephen Klein Wellness Center,Project HOME,19121,215-320-6187,https://projecthome.org/skwc,215-320-6187,2144 Cecil B. Moore Ave
+-75.145641305066164,40.032183893964287,42,Pathways to Housing,Project HOME,19141,215-390-1500,https://pathwaystohousingpa.org/,N/A,"5201 Old York Rd, Suite 108"
+-75.166619388853505,39.953807223743205,43,The Hub of Hope,Project HOME,19102,215-309-5225,https://projecthome.org/hubofhope,,"16th Street and JKF Boulevard, Suburban Station, Concourse level"
+-75.164591502384127,39.978149235025853,44,Meade Family Health Center,QCHC,19121,215-765-9501,,215-765-9501,1600 N. 18th Street
+-75.172402607881295,39.996269176736647,45,QCHC Family Health Center,QCHC,19132,215-227-0300,,215-227-0300,2501 West Lehigh Avenue
+-75.146029150495153,40.025957848040576,46,Cooke Family Health Center,QCHC,19141,215-457-6902,,215-457-6902,1300 West Louden Street
+-75.237512287444886,39.958436286166965,47,Sayre Health Center,Sayre-Penn,19139,215-474-4444,http://www.sayrehealth.org/,215-921-2388,5800 Walnut St
+-75.224611381046373,39.964926798237471,48,Spectrum Community Health Center,Spectrum,19139,215-471-2761,http://www.spectrumhs.org/,215-471-2761,5201 Haverford Ave
+-75.158710118479647,39.974795596515811,49,Broad Street Health Center,Spectrum,19122,215-471-2761,http://www.spectrumhs.org/,N/A,"1415 North Broad Street, Suite 224"
+-75.19790283977045,39.937415616180459,50,Reed Street Health Center,Spectrum,19146,215-471-2761,http://www.spectrumhs.org/,N/A,"1325 S. 33rd Street, Floor 3"
+-75.169384836590027,39.926440118093595,51,Health Center 1,PDPH,19145,215-685-6570,https://beta.phila.gov/services/mental-physical-health/city-health-centers/,N/A,"1930 S. Broad St., 2nd Floor"
+-75.164737917930935,40.03446682800557,52,Covenant House Health Services,Covenant,19144,215-844-0181,,N/A,251 East Bringhurst Street
+-75.178980019669368,40.067320335027446,53,Mt. Pleasant Medical Center,Covenant,19150,267-331-9832,,267-331-9832,8125 Stenton Avenue
+-75.161182508591907,39.967074313994885,54,Fairmount Primary Care Center,DVCH,19130,215-235-9600,http://dvch.org/locations/the-fairmount-primary-care-center/,215-684-5360,1412 Fairmount Avenue
+-75.183770571183189,39.953300767260409,55,Fairmount Primary Care Center at Horizon House,DVCH,19104,215-222-2466,http://dvch.org/locations/the-fairmount-primary-care-center-at-horizon-house/,N/A,120 S. 30th Street
