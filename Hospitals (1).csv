@@ -1,0 +1,37 @@
+﻿X,Y,OBJECTID,HOSPITAL_NAME,STREET_ADDRESS,CITY,STATE,ZIP_CODE,PHONE_NUMBER,HOSPITAL_TYPE
+-75.081543031091073,40.019195600139959,1,Aria Health- Frankford Campus,4900 Frankford Avenue,Philadelphia,PA,19124,215-831-2000,General medical
+-74.981491517931246,40.070961727688541,2,Aria Health- Torresdale Campus,10800 Knights Road,Philadelphia,PA,19114,215-612-4000,General medical
+-75.215401243505895,40.00091756459625,3,Belmont Center for Comprehensive Treatment ,4200 Monument Road,Philadelphia,PA,19131,215-877-2000,Behavioral health
+-75.213120025876023,40.079012783940925,4,Chestnut Hill Hospital,8835 Germantown Avenue,Philadelphia,PA,19118, 215-248-8200,General medical
+-75.19275457247646,39.949773160791672,5,The Children's Hospital of Philadelphia,34th Street and Civic Center Boulevard      ,Philadelphia,PA,19104,215-590-1000,General medical
+-75.14458307066883,40.036936608337598,6,Einstein Medical Center - Philadelphia,5501 Old York Rd,Philadelphia,PA,19141,215-456-7890,General medical
+-75.095519684939234,40.068347743432334,7,Fox Chase Cancer Center,333 Cottman Avenue,Philadelphia,PA,19111,215-728-6900,General medical
+-75.149980707192015,39.970549826292242,8,Girard Medical Center,8th St. & Girard Avenue,Philadelphia,PA,19122,215-787-2000,Long term care
+-75.192682681824706,39.950411673795749,9,Hospital of the University of Pennsylvania,3400 Spruce Street,Philadelphia,PA,19104,215-662-4000,General medical
+-75.087084330375376,40.068656811006015,10,Jeanes Hospital,7600 Central Avenue,Philadelphia ,PA,19111, 215-728-2000,General medical
+-75.097760188171009,40.045638399339431,11,Kindred Hospital Philadelphia ,6129 Palmetto St.,Philadelphia,PA,19111,215-722-8555,Long term care
+-75.169384833082148,39.926440118014682,12,Kindred Hospital South Philadelphia ,1930 S. Broad Street,Philadelphia,PA,19145,267-570-5200,Long term care
+-75.164996470346708,39.95658468937475,13,Magee Rehabilitation Hospital ,1513 Race Street,Philadelphia,PA,19102,215-587-3333,Rehabilitation
+-75.230265151893875,39.952429657570377,14,Mercy Philadelphia Hospital,501 South 54th Street,Philadelphia,PA,19143,215-748-9000,General medical
+-75.170119273680939,39.921847802350904,15,Thomas Jefferson University Hospitals Methodist,2301 South Broad St.,Philadelphia,PA,19148,215-952-9000,General medical
+-75.043472572955167,40.058743804290081,16,Nazareth Hospital,2601 Holme Avenue,Philadelphia,PA,19152,215-335-6000,General medical
+-75.154798458780093,39.945687602308858,17,Pennsylvania Hospital,800 Spruce Street,Philadelphia,PA,19107,215-829-3000,General medical
+-75.199480400024939,39.957214448315185,18,Penn Presbyterian Medical Center, 51 North 39th street,Philadelphia,PA,19104,215-662-8000,General medical
+-75.210331854871953,40.028494112407706,19,Roxborough Memorial Hospital,5800 Ridge Avenue,Philadelphia,PA,19128,215-483-9900,General medical
+-75.125183828826493,40.006759929892738,20,St. Christopher's Hospital for Children,3601 A Street,Philadelphia,PA,19134,215-427-5000,General medical
+-75.162764717298614,39.971839945865867,21,St.Joseph's Hospital (dba North Phila Health System),16th and Girard Ave ,Philadelphia,PA,19130,215-787-9000,General medical
+-75.152158045053213,40.004734494340134,22,Temple University Hospital - Main Campus,3401 N. Broad Street,Philadelphia,PA,19140,215-707-2000,General medical
+-75.130854809195696,39.990837511596972,23,Temple Episcopal,100 E Lehigh Ave,Philadelphia,PA,19125,215-707-1200,Behavioral health
+-75.158647675766446,39.949823427144196,24,Thomas Jefferson University Hospital,111 South 11th Street  ,Philadelphia,PA,19107,215-955-6000,General medical
+-75.201482961574172,39.949689773726995,25,Philadelphia VA Medical Center,3900 Woodland Ave,Philadelphia,PA,19104,215-823-5800,General medical
+-75.046968692405002,40.065264827088988,26,Angela Jane Pavilion Rehabilitation Hospital,8410 Roosevelt Boulevard,Philadelphia,PA,19152,215-708-1200,Rehabilitation
+-75.223605068357841,40.042599615741388,27,Fairmount Behavioral Health Systems,561 Fairthorne Avenue,Philadelphia,PA,19128,215-487-4100,Behavioral health
+-75.099301495697091,40.02313095439343,28,Friends Hospital,4641 Roosevelt Boulevard,Philadelphia,PA,19124,215-831-4600,Behavioral health
+-75.160405600909073,40.040103710146333,29,Germantown Community Health Center,1 Penn Boulevard,Philadelphia,PA,19144,215-951-8000,Behavioral health
+-75.171754246912016,39.945417076940537,30,Good Shepherd Penn Partners,1800 Lombard Street,Philadelphia,PA,19146,877-969-7342,Rehabilitation
+-75.134855402746581,39.98183881148357,31,Kensington Hospital,136 West Diamond Street,Philadelphia,PA,19122,215-426-8100,Behavioral health
+-75.219402067423559,39.961156395626809,32,Kirkbride Center,111 North 49th Street,Philadelphia,PA,19139,215-471-2600,Behavioral health
+-75.142796864034395,40.037793441833394,33,Moss Rehabilitation Hospital,1200 W Tabor Road,Philadelphia,PA,19141,215-456-9800,Rehabilitation
+-75.169308258496088,39.926788220196755,34,Saint Agnes Long Term Care Hospital,1900 South Broad Street,Philadelphia,PA,19145,215-339-4100,Long term care
+-75.151690787734978,40.006931139908232,35,Shriners Hospitals For Children ,3551 North Broad Street,Philadelphia,PA,19140,215-430-4079,General medical
+-75.154910691275717,39.94812899609898,36,Wills Eye Hospital,840 Walnut Street,Philadelphia,PA,19107,215-928-3000,General medical
