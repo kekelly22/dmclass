@@ -88,6 +88,7 @@ drop PRVIDER5
 
 ta Alc, mi 
 replace Alc=-9 if Alc==. //* Here I'm replacing any missing values for alchohol use. Blank or missing answers are replaced with the appropriate value label*/
+//ah no! the other way round! it was right and you made it wrong ;(
 
 ta RACE //* checking to make sure all participants have a response for race*//
 recode RACE (1/3 5 =1 "POC")(4 =0 "Non-POC"), gen(POC) //* recoding to create a new variable specifically for all people of color (POC) and then white/caucasian people *//
@@ -154,6 +155,9 @@ through the command in your computer's command prompt (for my Mac it's called te
 but I finally got my biggest data set to upload this way! If it would be helpful, I could take the time to type up how I did 
 this for my classmates/future students to use to upload bigger data sets to GitHub. One of the key articles I used is here:
 https://help.github.com/en/github/managing-files-in-a-repository/adding-a-file-to-a-repository-using-the-command-line */
+
+//ok, thanks extra credit ;)
+
 
 drop if NUMWOMEN < 1 /* dropping observations from male-only households or male participants*/
 drop if SEX==1
@@ -288,7 +292,7 @@ Then I saved as a PDF so that I could upload the revised graph to Git. Is that t
 /* Interpretation of graph: This graph shows that, on average, women without a women's health healthcare provider report an overall lower quality of life. This supports the idea that increased healthcare access and health resources will have an overall impact beyond typical health outcomes for women. 
 However, this graph doesn't display if the difference between women with or without a women's health healthcare provider is statistically significant. To determine this, I'd need to run a one sample t-test. */
 
-graph bar TimeWaBi, over(RACE)
+graph hbar TimeWaBi, over(RACE) //hbar usually cleaner
 graph save TimeWaBixRace, replace
 /* Interpretation of graph: There is a small difference between racial groups' number of times they reported 30 minutes of walking or bike per week. The graph displays that Black middle-aged women report the least times and Chinese middle-aged women reported the most times. */
 
