@@ -202,6 +202,13 @@ save phlHealthLocations, replace
 
 * MERGE #2 */
 merge 1:1 X using cdcTractMerge
+//breaks here 
+//. merge 1:1 X using cdcTractMerge
+//variable X does not uniquely identify observations in the master data
+//and it doesnt make sense anyway, if anything on both X and Y and m:1 because you have point here and polygon (tract) in using
+//and should round up x and y to match better, we should talk and we should talk about macros and loops, say tues?
+
+
 *8 non-merges (from Census Tracts)
 drop if _merge!=3
 drop _merge
