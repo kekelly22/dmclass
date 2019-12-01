@@ -59,8 +59,8 @@ https://www.census.gov/programs-surveys/geography/technical-documentation/record
 /******************/
 /*     LOOKING    */
 /******************/
-mkdir ~\kristinkellyPS5
-cd ~\kristinkellyPS5
+mkdir ~\kristinkellyPS6
+cd ~\kristinkellyPS6
 
 * MACROS ?
 /* trying to call a macro to remove spaces between values. I've spent at least 3 hours trying to figure this out using slides and google. Here are some of the versions of what I've tried.
@@ -369,7 +369,6 @@ save master, replace
 * Graphing a scatter plot of obesity rates by racial populations
 twoway (scatter obesity Total_Po_Pop_White_Alone Total_Pon_American_Alone Total_Poska_Native_Alone Total_Po_Pop_Asian_Alone Total_Poc_Islander_Alone Total_PoOther_Race_Alone Total_Powo_or_More_Races), ytitle(Obesity) ylabel(0(1000)7000, labsize(small) angle(vertical) valuelabel alternate) xtitle(Race) title(Obesity by Race)
 * INTERPRETATION: You can tell there are some patterns in differences of obesity rates by racial backgrounds.
-
 
 * Stata crashed here and I wasn't able to recover my two other visuals. I created a bar graph of access to healthcare by zip codes to see which zip codes seemed the most health-conencted. I also created a table of Housing Unit counts by geoid to see which areas are more inhabitated (to help inform future tests or visuals). More visuals to come!
 * 
