@@ -6,7 +6,6 @@
 * Just a reminder to viewers that this is a new dataset created after ps4. Previous problem sets used different data and hypotheses that weren't conducive to the future data processes of this course.
 * I've been working on my code in and out of family occasions this past few days since class. I think my code has improved a lot in my eyes, but I'd still like to meet on Tuesday.
 
-
 /******************/
 /*   HYPOTHESES   */
 /******************/
@@ -361,7 +360,7 @@ merge m:1 GeoID using phlCensus_SE
 rename geoid GeoID_String
 drop _merge
 * end of MERGE 4 
-save masrter, replace
+save master, replace
 
 /******************/
 /*     VISUALS    */
@@ -400,10 +399,3 @@ save phlHP2020, replace
 
 reshape wide topic rate, i(measure) j(topic 1/29) string */
 */
-
-
-
-
-
-
-
