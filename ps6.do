@@ -100,6 +100,7 @@ gen statecode=substr(tract,1,2)
 gen countycode=substr(tract,3,3)
 gen tractcode=substr(tract,6,.)
 
+//technically correct but substantively doesnt make sense, can just say: drop spell out varnames; shorter ad simpler!
 * creating a loop to drop the unnecessary confidence interval variables
 foreach var of varlist *crude95ci placefips geolocation {
 drop `var'
@@ -181,12 +182,14 @@ collapse (first) geoid HousUnitCount, by (Zip)
 save tract_to_zip, replace
 
 /* MERGE 2 */
-merge m:1 geoid using cdcTractMerge
+//merge m:1 geoid using cdcTractMerge //why m:1??? should be 1:1 i guess there's a mistake duplicate in data, need to investigate how and why!
+//also do keep in mind that with census tracts they do vary from year to year!
+
 *333 non-merges - This is most likely explained by the data set of with census tracts and zips containing geoids that went beyond the city limits of Philadelphia. Since my health statistics are for the primary 47 zip codes of the city of Philadelphia, those are the ones that matched and kept. 
 drop if _merge!=3
 drop _merge
 rename placename City
-save master, replace
+save master, replace //probaby better give another more substantive name!
 
 /**** For the following datasets (#3, 4, 5) I am cleaning and appending to make one bigger dataset with the combined data involving the locations of health locations in Philadelphia ***** */
 * bringing in dataset #3: List of Philly hospitals and locations by zip, address, and XY coordinates
@@ -220,6 +223,7 @@ save phlCRC, replace
 *** Health data: name of 4 Community Health Resource Center, type of CHRC
 
 /* APPEND */
+//you sure appending makes sense here and not merging? pls give it some thought! if this is wrong, that'd be a major problem for the final project!
 append using phlhospitals
 * Brought in 2 new zips and 2 zips that were already in phlhospitals to add resource data. 
 save phlHealthLocations, replace
@@ -314,6 +318,8 @@ foreach v of varlist _all {
 		 local newlabel1=substr(`"`newlabel'"',1,8)+substr(`"`newlabel'"',-16,16)
          label var `v' `"`newlabel1"'
 }
+//try string function strtoname instead
+
 
 rename NAME TractName
 rename TRACT TractNum
@@ -369,6 +375,8 @@ save master, replace
 * Graphing a scatter plot of obesity rates by racial populations
 twoway (scatter obesity Total_Po_Pop_White_Alone Total_Pon_American_Alone Total_Poska_Native_Alone Total_Po_Pop_Asian_Alone Total_Poc_Islander_Alone Total_PoOther_Race_Alone Total_Powo_or_More_Races), ytitle(Obesity) ylabel(0(1000)7000, labsize(small) angle(vertical) valuelabel alternate) xtitle(Race) title(Obesity by Race)
 * INTERPRETATION: You can tell there are some patterns in differences of obesity rates by racial backgrounds.
+
+//need way more visuals!! ike couple hundred lines! and do remember to explore with them your research questions and hypotheses and circle back to them and reach some conclusion! also may consider some t-tests and anovas
 
 * Stata crashed here and I wasn't able to recover my two other visuals. I created a bar graph of access to healthcare by zip codes to see which zip codes seemed the most health-conencted. I also created a table of Housing Unit counts by geoid to see which areas are more inhabitated (to help inform future tests or visuals). More visuals to come!
 * 
