@@ -1,22 +1,23 @@
 * Data Management Final Project
-* Due: Saturday, November 30th, 2019
+* Due: Sunday, December 15th, 2019
 * Kristin Kelly
 * Stata version 16
-
-* Just a reminder to viewers that this is a new dataset created after ps4. Previous problem sets used different data and hypotheses that weren't conducive to the future data processes of this course.
-* I've been working on my code in and out of family occasions this past few days since class. I think my code has improved a lot in my eyes, but I'd still like to meet on Tuesday.
 
 /******************/
 /*   HYPOTHESES   */
 /******************/
-* 1) Rates of obesity, asthma and smoking will be higher in poorer areas.
-* 2) Rates of access to healthcare and annual check-ups will be unrelated to health services available in that area.
-* 3) Obesity rates will be different by races.
+* 1) I expect that rates of obesity, asthma and smoking will be higher in poorer areas of Philadelphia, as well as differ by racial identities.
+* 2) I expected that rates of healthcare access and insurance coverage will be lower for low income households.
+*** I also expect that self-reported access to healthcare will be unrelated to health services available in that area.
+* 3) I expect lower income populations to have lower reports of annual check-ups.
+*~~~~~~~~~~~~~ Hypotheses for side analyses ~~~~~~~~~~~~~~~~~~
+*~~~~~~~~~ 4) I expect Philadelphia county will have higher rates of homicide, HIV-related deaths and drug-induced deaths than the surrounding 4 PA counties.
+*~~~~~~~~~ 5) I expect all of the counties will have similar death rates by cause of stroke, suicide, and coronary heart disease.
+*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 
 /************/
 /*   DATA   */
-/************/
-/* 
+/************/   /* 
 Dataset #1: CDC 500 CITIES
 From the CDC, "500 Cities: Census Tract-level Data" (2018)
 https://chronicdata.cdc.gov/500-Cities/500-Cities-Census-Tract-level-Data-GIS-Friendly-Fo/k86t-wghb
@@ -68,10 +69,11 @@ Neighborhood Food Retail Report collected by Philadelphia Department of Public H
 "This dataset is derived from the Neighborhood Food Retail in Philadelphia report. The report, and accompanying online resource gallery, looks at neighborhood availability of "high-produce supply stores” (e.g., supermarkets, produce stores, farmers’ markets) in relation to “low-produce supply stores” (like dollar stores, pharmacies, and convenience stores)."
 https://www.opendataphilly.org/dataset/neighborhood-food-retail
 Last Updated: 2019 */
+*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 
-/******************/
-/*     LOOKING    */
-/******************/
+/*******************/
+/*     CLEANING    */
+/*******************/
 /* sub
 mkdir ~\kristinkellyPS5
 cd ~\kristinkellyPS5 */
@@ -267,95 +269,88 @@ replace Num_HealthServiceProv=0 if Num_HealthServiceProv==.
 rename geoid GeoID
 save master, replace
 * end of MERGE 3 *
-* NOTE: after this merge, this finished dataset has:
+* NOTE: after this merge, this dataset has:
 *** Geo-identifiers: geoid, X coord, Y coord, Zip, Address, City, State
 *** Health data: # of health service providers in 32 (of 47) Zip codes, % rates (for: access to healthcare, high blood pressure, asthma, people with regular annual check-ups, smoking, people with dental healthcare, people getting regular mammogram screenings, obesity, and people getting regular PAP tests)
 *** Other: Population in 2010, Housing unit count
 
 /* Bringing in dataset #7: Custom report of Philly census data via Social Explorer */
+
 *** This is my code for when I had to download the data and dictionary files. I saved them on my computer and then pushed to github in order to have an online import. Before uploading to github I dropped variables I didn't need for space/mem purposes.
 /* infile using "R12396925.dct", using("R12396925_SL140.txt")
 keep  FIPS NAME QName SUMLEV LOGRECNO STATE COUNTY TRACT GEOID A00001_001 A00002_002 A01001_002 A01001_003 A01001_004 A01001_005 A01001_006 A01001_007 A01001_008 A01001_009 A01001_010 A01001_011 A01001_012 A01001_013 A03001_002 A03001_003 A03001_004 A03001_005 A03001_006 A03001_007 A03001_008 A10025_001 A10010_001 A10010_002 A10010_003 A10010_004 A10010_005 A10010_006 A10010_007 A10010_008 A10010_009 A10010_010 A03001B_001 A03001B_002 A03001B_003 A03001B_004 A03001B_005 A03001B_006 A03001B_007 A03001B_008 A03001B_009 A03001B_010 A01003B_002 A01003B_003 A01003B_004 A01003B_005 A01003B_006 A01003B_007 A01003B_008 A01003B_009 A01003B_010 A14008_001 A14009_001 A14009_002 A14009_003 A14009_004 A14009_005 A14009_006 A14009_007 A14009_008 A14009_009 A14009_010 A13003B_001 A13003B_002 A13003B_003 B13004_001 B13004_002 B13004_003 B13004_004 B13004_005 A20001_001 A20001_002 A20001_003 A20001_004 A20001_005
 save phlCensus_SE, replace */
 
 use "https://github.com/kekelly22/dmclass/blob/master/phlCensus_SE.dta?raw=true", clear
-drop GEOID A03001B_009 A01001_003 A14009_010 QName SUMLEV LOGRECNO STATE COUNTY A01001_002 A01001_004 A01001_005 A01001_006 A01001_007 A01001_008 A01001_009 A10010_001 A10010_002 A10010_003 A10010_004 A10010_005 A10010_006 A10010_007 A10010_008 A10010_009 A10010_010 A03001B_001 A03001B_002 A03001B_003 A03001B_004 A03001B_005 A03001B_006 A03001B_007 A03001B_008 A03001B_010 A01003B_002 A01003B_003 A01003B_004 A01003B_005 A01003B_006 A01003B_007 A01003B_008 A01003B_009 A01003B_010 B13004_002 B13004_003 B13004_004 B13004_005 A20001_001 A10025_001 A00001_001 A00002_002
+drop GEOID A03001B_009 A01001_003 A14009_010 QName SUMLEV LOGRECNO STATE COUNTY A01001_002 A01001_004 A01001_005 A01001_006 A01001_007 A01001_008 A01001_009 A10010_001 A10010_002 A10010_003 A10010_004 A10010_005 A10010_006 A10010_007 A10010_008  A10010_010 A03001B_001 A03001B_002 A03001B_003 A03001B_004 A03001B_005 A03001B_006 A03001B_007 A03001B_008 A03001B_010 A01003B_002 A01003B_003 A01003B_004 A01003B_005 A01003B_006 A01003B_007 A01003B_008 A01003B_009 A01003B_010 B13004_002 B13004_003 B13004_004 B13004_005 A20001_001 A10025_001 A00001_001 A00002_002 A14009_001 A13003B_001 A13003B_002 A13003B_003
 save phlCensus_SE, replace
 
-	/* I'm trying out better ways to do this code so that my variable labels aren't abbreviated and only the variable nane is. But I'm struggling to do that (below). In the meantime, here is the code that worked for me: */
 foreach v of varlist _all {
          local label : var label `v'
 		 local label1 = subinstr(`"`label'"', "Average", "Avg", .)
 		 local label2 = subinstr(`"`label1'"', "In 2017 Inflation Adjusted Dollars", "", .)
 		 local label3 = subinstr(`"`label2'"', "Population", "Pop", .)
 		 local label4 = subinstr(`"`label3'"', "Dollars Adjusted", "", .)
-		 local label5 = subinstr(`"`label4'"', "Hous*", "Hous", .)
-         local label6 = subinstr(`"`label5'"', " ", "_", .)
-		 local label7 = subinstr(`"`label6'"', "(", "", .)
-		 local label8 = subinstr(`"`label7'"', ")", "", .)
-		 local label9 = subinstr(`"`label8'"', ".", "", .)
-		 local label10 = subinstr(`"`label9'"', "-", "", .)
-		 local label11 = subinstr(`"`label10'"', ",", "", .)
-		 local label12 = subinstr(`"`label11'"', "[", "", .)
-		 local label13 = subinstr(`"`label12'"', "]", "", .)
-		 local newlabel = subinstr(`"`label13'"', ":", "", .)
-		 local newlabel1=substr(`"`newlabel'"',1,8)+substr(`"`newlabel'"',-16,16)
-         label var `v' `"`newlabel1"'
-}
-
+		 local label5 = subinstr(`"`label4'"', "Household", "Hous", .)
+		 local label6 = subinstr(`"`label5'"', "Dollars adjusted", "", .)
+		 local label7 = subinstr(`"`label6'"', "Income", "Inc_", .)
+		 local label8 = subinstr(`"`label7'"', "Insurance", "Ins", .)
+		 local label9 = subinstr(`"`label8'"', "Coverage", "Cov", .)
+		 local label10 = subinstr(`"`label9'"', "or", "", .)
+         local label11 = subinstr(`"`label10'"', " ", "", .)
+		 local label12 = subinstr(`"`label11'"', "(", "", .)
+		 local label13 = subinstr(`"`label12'"', ")", "", .)
+		 local label14 = subinstr(`"`label13'"', ".", "", .)
+		 local label15 = subinstr(`"`label14'"', "-", "", .)
+		 local label16 = subinstr(`"`label15'"', ",", "", .)
+		 local label17 = subinstr(`"`label16'"', "[", "", .)
+		 local label18 = subinstr(`"`label17'"', "]", "", .)
+		 local newlabel = subinstr(`"`label18'"', ":", "", .)
+         label var `v' `"`newlabel"'
+} /* I used a loop with local macros to remove invalid characters from the variable labels and I abbreviated the variable label names for simplicity */
 rename NAME TractName
 rename TRACT TractNum
 rename FIPS geoid
-
-foreach v of varlist A01001_010 A01001_011 A01001_012 A01001_013 A03001_002 A03001_003 A03001_004 A03001_005 A03001_006 A03001_007 A03001_008 A14008_001 A14009_001 A14009_002 A14009_003 A14009_004 A14009_005 A14009_006 A14009_007 A14009_008 A14009_009 A13003B_001 A13003B_002 A13003B_003 B13004_001 A20001_002 A20001_003 A20001_004 A20001_005 {
+rename A03001_003 TotalPopBlack
+rename A03001_004 TotalPopNative
+rename A10010_009 TotalPopHispLat
+rename A03001_006 TotalPopHaw_PacIs
+rename B13004_001 Pop18to64_Poverty
+rename A20001_004 Pop_PublHInsCov
+rename A20001_005 Pop_PrivHInsCov /* I renamed specific variables above with more coherent labels that my loop code would make too messy/confusing. Stata has an understandable limit of 25 characters for a var name and their wasn't an option that worked universally for all of my variables to have sensible names if I put them all in the loop below. */
+foreach v of varlist A01001_010 A01001_011 A01001_012 A01001_013 A03001_002 A03001_005 A03001_007 A03001_008 A14008_001 A14009_002 A14009_003 A14009_004 A14009_005 A14009_006 A14009_007 A14009_008 A14009_009 A20001_002 A20001_003 {
 	local x : variable label `v'
 	rename `v' `x'
 }
-* Above: I used a loop with local macros to remove invalid characters from the variable labels and I abbreviated the variable label names for simplicity */
-
-/* Here I'm trying to create loops to clean my labels of invalid characters so that I can rename my variables based off of their labels.  I was trying to create code to first clean the labels, then rename the variables for their names to match the labels, and THEN substring out the variable names to be abbreviated for ease of use. But I keep hitting road blocks... this was the closest I got code to success:
-
-foreach v of varlist FIPS NAME QName SUMLEV LOGRECNO STATE COUNTY TRACT GEOID A00001_001 A00002_002 A01001_002 A01001_003 A01001_004 A01001_005 A01001_006 A01001_007 A01001_008 A01001_009 A01001_010 A01001_011 A01001_012 A01001_013 A03001_002 A03001_003 A03001_004 A03001_005 A03001_006 A03001_007 A03001_008 A10025_001 A10010_001 A10010_002 A10010_003 A10010_004 A10010_005 A10010_006 A10010_007 A10010_008 A10010_009 A10010_010 A03001B_001 A03001B_002 A03001B_003 A03001B_004 A03001B_005 A03001B_006 A03001B_007 A03001B_008 A03001B_010 A01003B_002 A01003B_003 A01003B_004 A01003B_005 A01003B_006 A01003B_007 A01003B_008 A01003B_009 A01003B_010 A14008_001 A14009_001 A14009_002 A14009_003 A14009_004 A14009_005 A14009_006 A14009_007 A14009_008 A14009_009 A14009_010 A13003B_001 A13003B_002 A13003B_003 B13004_001 B13004_002 B13004_003 B13004_004 B13004_005 A20001_001 A20001_002 A20001_003 A20001_004 A20001_005 {
-         local label : var label `v'
-         local label1 = subinstr(`"`label'"', " ", "_", .)
-		 local label2 = subinstr(`"`label1'"', "(", "", .)
-		 local label3 = subinstr(`"`label2'"', ")", "", .)
-		 local label4 = subinstr(`"`label3'"', ".", "", .)
-		 local label5 = subinstr(`"`label4'"', "-", "", .)
-		 local label6 = subinstr(`"`label5'"', ",", "", .)
-		 local label7 = subinstr(`"`label6'"', "[", "", .)
-		 local label8 = subinstr(`"`label7'"', "]", "", .)
-		 local newlabel = subinstr(`"`label7'"', ":", "", .)
-		 label var `v' `"`newlabel'"'
-}
-
-foreach v of varlist A00001_001 A00002_002 A01001_002 A01001_003 A01001_004 A01001_005 A01001_006 A01001_007 A01001_008 A01001_009 A01001_010 A01001_011 A01001_012 A01001_013 A03001_002 A03001_003 A03001_004 A03001_005 A03001_006 A03001_007 A03001_008 A10025_001 A10010_001 A10010_002 A10010_003 A10010_004 A10010_005 A10010_006 A10010_007 A10010_008 A10010_009 A10010_010 A03001B_001 A03001B_002 A03001B_003 A03001B_004 A03001B_005 A03001B_006 A03001B_007 A03001B_008 A03001B_010 A01003B_002 A01003B_003 A01003B_004 A01003B_005 A01003B_006 A01003B_007 A01003B_008 A01003B_009 A01003B_010 A14008_001 A14009_001 A14009_002 A14009_003 A14009_004 A14009_005 A14009_006 A14009_007 A14009_008 A14009_009 A14009_010 A13003B_001 A13003B_002 A13003B_003 B13004_001 B13004_002 B13004_003 B13004_004 B13004_005 A20001_001 A20001_002 A20001_003 A20001_004 A20001_005 {
-	local x : variable label `v'
-	rename `v' `x'
-}
-
-foreach v of varlist A00001_001 A00002_002 A01001_002 A01001_003 A01001_004 A01001_005 A01001_006 A01001_007 A01001_008 A01001_009 A01001_010 A01001_011 A01001_012 A01001_013 A03001_002 A03001_003 A03001_004 A03001_005 A03001_006 A03001_007 A03001_008 A10025_001 A10010_001 A10010_002 A10010_003 A10010_004 A10010_005 A10010_006 A10010_007 A10010_008 A10010_009 A10010_010 A03001B_001 A03001B_002 A03001B_003 A03001B_004 A03001B_005 A03001B_006 A03001B_007 A03001B_008 A03001B_010 A01003B_002 A01003B_003 A01003B_004 A01003B_005 A01003B_006 A01003B_007 A01003B_008 A01003B_009 A01003B_010 A14008_001 A14009_001 A14009_002 A14009_003 A14009_004 A14009_005 A14009_006 A14009_007 A14009_008 A14009_009 A14009_010 A13003B_001 A13003B_002 A13003B_003 B13004_001 B13004_002 B13004_003 B13004_004 B13004_005 A20001_001 A20001_002 A20001_003 A20001_004 A20001_005 {
-	rename * substr(`"var"',1,10)+substr(`"var"',-26,22)
-}	  */
-	
 destring geoid, generate(GeoID) /* had to do this to be able to merge. my master data set bas geoid as a numeric */
-gen Pop55over = Total_Pop_55_to_64_Years+Total_Pop_65_to_74_Years+Total_Pop_75_to_84_Years+Total_Po5_Years_and_Over
-* Generating a new variable for ages 55 and up for possible visuals or tests of older populations.
-drop Total_Pop_55_to_64_Years Total_Pop_65_to_74_Years Total_Pop_75_to_84_Years Total_Po5_Years_and_Over
-
+gen Pop_55over = TotalPop55to64Years+TotalPop65to74Years+TotalPop75to84Years+TotalPop85YearsandOver /* Generating a new variable for ages 55 and up for possible visuals or tests of older populations. */
+drop TotalPop55to64Years TotalPop65to74Years TotalPop75to84Years TotalPop85YearsandOver
+order geoid GeoID TractName TractNum Pop_55over
 save phlCensus_SE, replace
+
+* NOTE: after cleaning, this dataset has:
+*** Geo-identifiers: geoid, tract name, tract number
+*** Health data: insurance coverage, insurance cov provider (public or private)
+*** Other: Population over 55yo, pop by race (white, black, native american/alaskan, asian, hawaiian/pacific islander, hispanic/latinx, other races, multi-races), average household income, avg household inc by race, pop with poverty status
+** 31 variables, 384 observations
 
 * MERGE 4 *
 use master, clear
 merge m:1 GeoID using phlCensus_SE
-* 340 non-merges - most likely for the same reasons listed above with the 
+* 340 non-merges - most likely for the same reasons listed above, due to using 47 city-specific zip codes from the larger county pool of zips
 rename geoid GeoID_String
 drop _merge
 * end of MERGE 4 
 save master, replace
 
-* Bringing in dateset #9: City of Philadelphia's Neighborhood Food Retail (details above)
-insheet using "http://data-phl.opendata.arcgis.com/datasets/53b8a1c653a74c92b2de23a5d7bf04a0_0.csv"
+* NOTE: after this merge, this dataset has:
+*** Geo-identifiers: geoid, X coord, Y coord, Zip, Address, City, State, tract name, tract number
+*** Health data: # of health service providers in 32 (of 47) Zip codes, % rates (for: access to healthcare, high blood pressure, asthma, people with regular annual check-ups, smoking, people with dental healthcare, people getting regular mammogram screenings, obesity, and people getting regular PAP tests), insurance coverage, insurance cov provider (public or private)
+*** Other: Population in 2010, Housing unit count, Population over 55yo, pop by race (white, black, native american/alaskan, asian, hawaiian/pacific islander, other races, multi-races), average household income, avg household inc by race, pop with poverty status
+** 48 variables, 387 observations
+
+* Bringing in dataset #9: City of Philadelphia's Neighborhood Food Retail (details above)
+insheet using "http://data-phl.opendata.arcgis.com/datasets/53b8a1c653a74c92b2de23a5d7bf04a0_0.csv", clear
 drop shape__area shape__length OBJECTID pct_hpss
 
 la var high_poverty "High poverty is defined as 20% or more of the block group being below the federal poverty level"
@@ -368,8 +363,41 @@ rename pct_vehicle_availability Pct_VehiAccess
 la var total_hpss "Total number of high-produce supply stores within a half mile walking distance of the block group."
 la var total_restaurants "Number of restaurants, bars, and food trucks located within a block group	"
 la var total_lpss "Total number of low-produce supply stores within a half mile walking distance of the block group."
-la var supermarket_access "Binary indicator for whether or not the block group has a supermarket within a half mile walking distance."
+la var supermarket_access "Binary indicator for whether or not the block group has a supermarket within a half mile walking distance." /* I used the metadata provided with this dataset to assign value labels with logical explanations of these unique acronyms */
 
+tostring geoid10, g(newg) format(%12.0f) /* the call to format prevents stata throwing an error*/
+replace newg = substr(newg, 1, 11) /*removed block-level data to merge this with all my other data */
+ta newg
+foreach v in non_residential hpss_access supermarket_access high_poverty { 
+	encode `v', gen("`v'1")
+}
+collapse geoid10 (sum)total_lpss lpss_per1000 (sum)total_hpss hpss_per1000 Pct_VehiAccess (sum)total_restaurants pct_poverty non_residential1 (sum)hpss_access1 (sum)supermarket_access1 high_poverty1, by(newg)
+encode newg, gen("GeoID")
+
+save phl_FoodAccess, replace
+* NOTE: after cleaning, this dataset has:
+*** Geo-identifiers: geoid, residential/non-residential id
+*** Health data: low produce/high produce stores (# and percent per block), total restaurants (per block). total supermarkets (per block)
+*** Other: Access to vehicle, poverty id
+* 13 variables, 384 observations 
+
+* MERGE 5 *
+use master, clear
+merge m:1 GeoID using phl_FoodAccess
+* 340 non-merges - most likely for the same reasons listed above, due to using 47 city-specific zip codes from the larger coutny pool of zips
+rename geoid GeoID_String
+drop _merge
+* end of MERGE 4 
+save master, replace
+
+* NOTE: after this merge, this dataset has:
+*** Geo-identifiers: geoid, X coord, Y coord, Zip, Address, City, State, tract name, tract number, geoid, residential/non-residential id
+*** Health data: # of health service providers in 32 (of 47) Zip codes, % rates (for: access to healthcare, high blood pressure, asthma, people with regular annual check-ups, smoking, people with dental healthcare, people getting regular mammogram screenings, obesity, and people getting regular PAP tests), insurance coverage, insurance cov provider (public or private), low produce/high produce stores (# and percent per block), total restaurants (per block). total supermarkets (per block)
+*** Other: Population in 2010, Housing unit count, Population over 55yo, pop by race (white, black, native american/alaskan, asian, hawaiian/pacific islander, other races, multi-races), average household income, avg household inc by race, pop with poverty status, Access to vehicle, poverty id
+**  
+order GeoID GeoID_String X Y Zip City State TractName TractNum HousUnitCount population2010 Pop_55over TotalPop55to64Years TotalPop65to74Years TotalPop75to84Years TotalPop85YearsandOver TotalPopWhiteAlone TotalPopBlack TotalPopNative TotalPopAsianAlone TotalPopHaw_PacIs TotalPopSomeOtherRaceAlone TotalPopTwoMeRaces TotalPopHispLat AvgHousInc_ AvgHousInc_WhiteAloneHouse AvgHousInc_BlackAfrican AvgHousInc_AmericanIndiana AvgHousInc_AsianAloneDoll AvgHousInc_NativeHawaiiana AvgHousInc_SomeOtherRaceA AvgHousInc_TwoMeRaces AvgHousInc_HispanicLatin Pop18to64_Poverty TotalNoHealthInsCov TotalwithHealthInsCov Pop_PublHInsCov Pop_PrivHInsCov /* re-ordering my variables to be arranged from geo-identifiers to more demographic stats to health info. */
+ 
+*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 
 /**************************/
 /*     TESTS & VISUALS    */
@@ -399,6 +427,20 @@ graph save "HousIncxZip" "/Users/kristinkelly/Documents/Academic/Rutgers/Classes
 
 
 /* come back to this tabstat Avg_Housollars_adjusted_ Total_Nosurance_Coverage by(Zip) */
+*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
+
+/************************************/
+/*   RESULTS & SUGGESTED FINDINGS   */
+/************************************/
+* HYPOTHESIS 1) I expect that rates of obesity, asthma and smoking will be higher in poorer areas of Philadelphia, as well as differ by racial identities.
+* FINDING: 
+
+* HYPOTHESIS 2) I expected that rates of healthcare access and insurance coverage will be lower for low income households.
+*** I also expect that self-reported access to healthcare will be unrelated to health services available in that area.
+* FINDING:
+
+* HYPOTHESIS 3) I expect lower income populations to have lower reports of annual check-ups.
+* FINDING: 
 
 /************************/
 /*     SIDE ANALYSIS    */
@@ -438,6 +480,7 @@ foreach var in rateCancer_DeathRate rateCoronaryHD_DeathRate rateDrugInduced_Dea
 	destring, replace
 }
 save phlHP2020, replace
+*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 
 /******************/
 /*     VISUALS    */
@@ -445,7 +488,34 @@ save phlHP2020, replace
 * Creating pie charts of the distribution of homicides or suicides across this cluster of counties in Southeastern PA.
 graph pie rateHomicide_DeathRate17, over(County) plabel(_all percent, color(dknavy%80) size(vsmall)) intensity(inten90) title(Homicide Rates by County) legend(on) name(HomicidexCounty, replace)
 graph save "HomicidexCounty", replace
+* INTERPRETATION: This pie chart illustrates that of all of the reported rates of homicide in Bucks, Chester, Delaware, and Montgomery counties, Philadelphia county accounts for more than 50% of the death rates in these Southeastern PA counties. These illustrative findings would suggest that the hypothesis regarding higher homicide rates in Philadelphia county to be supported.
+ 
+graph pie rateDrugInduced_DeathRate, over(County) plabel(_all percent, color(dknavy%80) size(vsmall)) intensity(inten90) title(Drug-Induced Death Rates by County) legend(on) name(DrugInducedDeathxCounty, replace)
+graph save "DrugIndDeathxCounty", replace
+* INTERPRETATION: This pie chart illustrates that the reported rates of drug-induced deaths in Bucks, Chester, Delaware, and Montgomery counties were relatively similar in occurrence. Philadelphia, Delaware, and Bucks counties all account for roughly ~20% of drug-induced death rates in these Southeastern PA counties. It's possible that more research/data analysis regarding the opioid rates in these counties may contribute to an understanding of these findings. These illustrative findings would suggest that the hypothesis regarding higher drug-induced death rates in Philadelphia county are not supported.
+
+graph pie rateHIV_DeathRate, over(County) plabel(_all percent, color(dknavy%80) size(vsmall)) intensity(inten90) title(HIV-related Death Rates by County) legend(on) name(HIVDeathxCounty, replace)
+graph save "HIVdeathxCounty", replace
+* INTERPRETATION: This pie chart illustrates that of all of the reported rates of HIV-related deaths in Bucks, Chester, Delaware, and Montgomery counties, that Philadelphia county accounts for nearly 60% of the HIV death rates in these Southeastern PA counties. These illustrative findings would suggest that the hypothesis regarding greater HIV-related deaths in Philadelphia county to be supported.
+
+graph pie rateStroke_DeathRate, over(County) plabel(_all percent, color(dknavy%80) size(vsmall)) intensity(inten90) title(Stroke Death Rates by County) legend(on) name(StrokeDeathsxCounty, replace)
+graph save "StrokeIndDeathxCounty", replace
+* INTERPRETATION: This pie chart illustrates that the reported rates of drug-induced deaths in Bucks, Chester, Delaware, and Montgomery counties were relatively similar in occurrence. Philadelphia, Delaware, and Bucks counties all account for roughly ~20% of drug-induced death rates in these Southeastern PA counties. It's possible that more research/data analysis regarding the opioid rates in these counties may contribute to an understanding of these findings. These illustrative findings would suggest that the hypothesis regarding higher drug-induced death rates in Philadelphia county are not supported.
+
+
 graph pie rateSuicide_DeathRate, over(County) plabel(_all percent, color(dknavy%80) size(vsmall)) intensity(inten90) title(Suicide Rates by County) legend(on) name(SuicidexCounty, replace)
 * Interpretation: You can see that Philadelphia County has significantly more deaths due to homicide than any of the surrounding counties. You can also tell that suicide is reported almost equally across counties, which indicates that suicide rates transcend other health systems or social systems of an area.
 
-* Add in: more lines of code (twice as much), more visuals, t-tests/ANOVAS, give stronger interpretations related back to hypotheses/research questions, add in more data {not necessarily in merged set, but a side study}, add in tests/visuals of side demographics (elderly, etc) for more code, add in counties surrounding philadelphia county and do comparison of health rates (in dataset #6)
+* Add in: more visuals, t-tests/ANOVAS, give stronger interpretations related back to hypotheses/research questions, add in tests/visuals of side demographics (elderly, etc) for more code
+*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
+
+/************************************/
+/*   RESULTS & SUGGESTED FINDINGS   */
+/************************************/
+*~~~~~~~~~~~~~ Hypotheses for side analyses ~~~~~~~~~~~~~~~~~~
+* HYPTHESIS 4) I expect Philadelphia county will have higher rates of homicide, HIV-related deaths and drug-induced deaths than the surrounding 4 PA counties.
+* FINDING: The visual findings suggest that Philadelphia county does have higher rates of both homicide and HIV-related death. However, the sub-hypothesis suggesting Philadelphia county would have higher rates of drug-induced deaths was not supported.
+
+* HYPOTHESIS 5) I expect all of the counties will have similar death rates by cause of stroke, suicide, and coronary heart disease.
+* FINDING:
+*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
