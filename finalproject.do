@@ -2,7 +2,7 @@
 * Due: Sunday, December 15th, 2019
 * Kristin Kelly
 * Stata version 16
-
+*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 /******************/
 /*   HYPOTHESES   */
 /******************/
@@ -351,9 +351,8 @@ save master, replace
 
 * Bringing in dataset #9: City of Philadelphia's Neighborhood Food Retail (details above)
 insheet using "http://data-phl.opendata.arcgis.com/datasets/53b8a1c653a74c92b2de23a5d7bf04a0_0.csv", clear
-drop shape__area shape__length OBJECTID pct_hpss
+drop shape__area shape__length OBJECTID pct_hpss high_poverty
 
-la var high_poverty "High poverty is defined as 20% or more of the block group being below the federal poverty level"
 la var hpss_access "Access to high-produce supply stores as either No Access, Low Access, or Moderate or High Access"
 la var hpss_per1000 "Number of high-produce supply stores per 1,000 people"
 la var lpss_per1000 "Number of low-produce supply stores per 1,000 people"
@@ -368,12 +367,11 @@ la var supermarket_access "Binary indicator for whether or not the block group h
 tostring geoid10, g(newg) format(%12.0f) /* the call to format prevents stata throwing an error*/
 replace newg = substr(newg, 1, 11) /*removed block-level data to merge this with all my other data */
 ta newg
-foreach v in non_residential hpss_access supermarket_access high_poverty { 
+foreach v in non_residential hpss_access supermarket_access { 
 	encode `v', gen("`v'1")
 }
-collapse geoid10 (sum)total_lpss lpss_per1000 (sum)total_hpss hpss_per1000 Pct_VehiAccess (sum)total_restaurants pct_poverty non_residential1 (sum)hpss_access1 (sum)supermarket_access1 high_poverty1, by(newg)
-encode newg, gen("GeoID")
-
+collapse geoid10 total_lpss lpss_per1000 total_hpss hpss_per1000 Pct_VehiAccess total_restaurants pct_poverty non_residential1 hpss_access1 supermarket_access1, by(newg)
+gen double GeoID = real(newg)
 save phl_FoodAccess, replace
 * NOTE: after cleaning, this dataset has:
 *** Geo-identifiers: geoid, residential/non-residential id
@@ -384,26 +382,27 @@ save phl_FoodAccess, replace
 * MERGE 5 *
 use master, clear
 merge m:1 GeoID using phl_FoodAccess
-* 340 non-merges - most likely for the same reasons listed above, due to using 47 city-specific zip codes from the larger coutny pool of zips
-rename geoid GeoID_String
-drop _merge
-* end of MERGE 4 
+* 0 non-merges
+drop _merge newg geoid10
+* end of MERGE 5 
 save master, replace
-
 * NOTE: after this merge, this dataset has:
 *** Geo-identifiers: geoid, X coord, Y coord, Zip, Address, City, State, tract name, tract number, geoid, residential/non-residential id
 *** Health data: # of health service providers in 32 (of 47) Zip codes, % rates (for: access to healthcare, high blood pressure, asthma, people with regular annual check-ups, smoking, people with dental healthcare, people getting regular mammogram screenings, obesity, and people getting regular PAP tests), insurance coverage, insurance cov provider (public or private), low produce/high produce stores (# and percent per block), total restaurants (per block). total supermarkets (per block)
-*** Other: Population in 2010, Housing unit count, Population over 55yo, pop by race (white, black, native american/alaskan, asian, hawaiian/pacific islander, other races, multi-races), average household income, avg household inc by race, pop with poverty status, Access to vehicle, poverty id
+*** Other: Population in 2010, Housing unit count, Population over 55yo, pop by race (white, black, native american/alaskan, asian, hawaiian/pacific islander, other races, multi-races), average household income, avg household inc by race, pop with poverty status, Access to vehicle, poverty level 
 **  
-order GeoID GeoID_String X Y Zip City State TractName TractNum HousUnitCount population2010 Pop_55over TotalPop55to64Years TotalPop65to74Years TotalPop75to84Years TotalPop85YearsandOver TotalPopWhiteAlone TotalPopBlack TotalPopNative TotalPopAsianAlone TotalPopHaw_PacIs TotalPopSomeOtherRaceAlone TotalPopTwoMeRaces TotalPopHispLat AvgHousInc_ AvgHousInc_WhiteAloneHouse AvgHousInc_BlackAfrican AvgHousInc_AmericanIndiana AvgHousInc_AsianAloneDoll AvgHousInc_NativeHawaiiana AvgHousInc_SomeOtherRaceA AvgHousInc_TwoMeRaces AvgHousInc_HispanicLatin Pop18to64_Poverty TotalNoHealthInsCov TotalwithHealthInsCov Pop_PublHInsCov Pop_PrivHInsCov /* re-ordering my variables to be arranged from geo-identifiers to more demographic stats to health info. */
- 
+
+order GeoID GeoID_String X Y Zip City State TractName TractNum HousUnitCount population2010 Pop_55over TotalPopWhiteAlone TotalPopBlack TotalPopNative TotalPopAsianAlone TotalPopHaw_PacIs TotalPopSomeOtherRaceAlone TotalPopTwoMeRaces TotalPopHispLat AvgHousInc_ AvgHousInc_WhiteAloneHouse AvgHousInc_BlackAfrican AvgHousInc_AmericanIndiana AvgHousInc_AsianAloneDoll AvgHousInc_NativeHawaiiana AvgHousInc_SomeOtherRaceA AvgHousInc_TwoMeRaces AvgHousInc_HispanicLatin Pop18to64_Poverty TotalNoHealthInsCov TotalwithHealthInsCov Pop_PublHInsCov Pop_PrivHInsCov /* re-ordering my variables to be arranged from geo-identifiers to more demographic stats to health info. */
+replace City = "Philadelphia"
+replace State = "PA"
+save master, replace
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 
 /**************************/
 /*     TESTS & VISUALS    */
 /**************************/
 * Graphing a scatter plot of obesity rates by racial populations
-twoway (scatter obesity Total_Po_Pop_White_Alone Total_Pon_American_Alone Total_Poska_Native_Alone Total_Po_Pop_Asian_Alone Total_Poc_Islander_Alone Total_PoOther_Race_Alone Total_Powo_or_More_Races), ytitle(Obesity) ylabel(0(1000)7000, labsize(small) angle(vertical) valuelabel alternate) xtitle(Race) title(Obesity by Race)
+twoway (scatter obesity TotalPopWhiteAlone TotalPopBlack TotalPopNative TotalPopAsianAlone TotalPopHaw_PacIs TotalPopSomeOtherRaceAlone TotalPopTwoMeRaces TotalPopHispLat), ytitle(Obesity) ylabel(0(1000)7000, labsize(small) angle(vertical) valuelabel alternate) xtitle(Race) title(Obesity by Race)
 * INTERPRETATION: You can tell there are some patterns in differences of obesity rates by racial backgrounds.
 
 * Producing a correlation of access to healthcare and the nymber of healthcare providers by zip code. The idea of this test is 
