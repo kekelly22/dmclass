@@ -13,8 +13,7 @@
 *~~~~~~~~~~~~~ Hypotheses for side analyses ~~~~~~~~~~~~~~~~~~
 *~~~~~~~~~ 4) I expect Philadelphia county will have higher rates of homicide, HIV-related deaths and drug-induced deaths than the surrounding 4 PA counties.
 *~~~~~~~~~ 5) I expect all of the counties will have similar death rates by cause of stroke, suicide, and coronary heart disease.
-*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
-
+*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 /************/
 /*   DATA   */
 /************/   /* 
@@ -70,7 +69,6 @@ Neighborhood Food Retail Report collected by Philadelphia Department of Public H
 https://www.opendataphilly.org/dataset/neighborhood-food-retail
 Last Updated: 2019 */
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
-
 /*******************/
 /*     CLEANING    */
 /*******************/
@@ -194,7 +192,6 @@ save phlhospitals, replace
 * NOTE: after cleaning, this dataset has:
 *** Geo-identifiers: X coord, Y coord, Zip, Address
 *** Health data: names of 36 hospitals, type of hospital
-
 
 * bringing in dataset #4: List of Community Health Resource Centers in Philly and their locations by zip, address, and XY coordinates
 insheet using "https://github.com/kekelly22/dmclass/raw/master/Healthy_Start_CRCs.csv", clear
@@ -397,20 +394,15 @@ replace City = "Philadelphia"
 replace State = "PA"
 save master, replace
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
-
 /**************************/
 /*     TESTS & VISUALS    */
 /**************************/
-* Graphing a scatter plot of obesity rates by racial populations
-twoway (scatter obesity TotalPopWhiteAlone TotalPopBlack TotalPopNative TotalPopAsianAlone TotalPopHaw_PacIs TotalPopSomeOtherRaceAlone TotalPopTwoMeRaces TotalPopHispLat), ytitle(Obesity) ylabel(0(1000)7000, labsize(small) angle(vertical) valuelabel alternate) xtitle(Race) title(Obesity by Race)
-* INTERPRETATION: You can tell there are some patterns in differences of obesity rates by racial backgrounds.
-
-* Producing a correlation of access to healthcare and the nymber of healthcare providers by zip code. The idea of this test is 
-correlate access2hc Num_HealthServiceProv
-* This correlation indicates a mild, positive correlation (r = 0.2067). 
-twoway(scatter access2hc Num_HealthServiceProv) (lfit access2hc Num_HealthServiceProv)
-* Need to come back to this and include code for the visual effects I made ^^
-graph save "Graph" "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/New/Ac2HCxNumHCP.gph", replace
+use master
+* Producing a correlation of access to healthcare and the # of healthcare providers by zip code. The idea of this test is 
+correlate access2hc Num_HealthServiceProv /* This correlation indicates a mild, positive correlation ~~(r = 0.2067)~~ */
+twoway(scatter access2hc Num_HealthServiceProv) (lfit access2hc Num_HealthServiceProv) /* This visual isn't very visually appealing due to the discrete variables, but it does illustrate some of the positive correlation that the correlation test above indicated. */
+graph save "Access2HCxNumHCServ", replace
+* Interpretation: While a correlation cannot indicate cause, the positive correlation between number of health services and access to healthcare suggests that there is a relationship between surrounding services and access to healthcare. It could also be that the areas with more health services are wealthier areas and therefore have greater access to healthcare regardless of the # of services.
 
 graph hbar (mean) access2hc, over(Zip, label(labsize(tiny))) ytitle(Access to Healthcare) title(Access to Healthcare by Zip) name(Ac2HCxZip, replace)
 graph save "Ac2HCxZip" "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/New/Ac2HCxZip.gph", replace
@@ -424,10 +416,12 @@ graph save "HousCountxZip" "/Users/kristinkelly/Documents/Academic/Rutgers/Class
 graph hbar (mean) Avg_Housollars_adjusted_, over(Zip, label(labsize(tiny))) ytitle(Average Household Income) title(Household Income by Zip) name(HousIncxZip, replace)
 graph save "HousIncxZip" "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/HouseIncxZip.gph", replace
 
+* Graphing a scatter plot of obesity rates by racial populations
+twoway (scatter obesity TotalPopWhiteAlone TotalPopBlack TotalPopNative TotalPopAsianAlone TotalPopHaw_PacIs TotalPopSomeOtherRaceAlone TotalPopTwoMeRaces TotalPopHispLat), ytitle(Obesity) ylabel(0(1000)7000, labsize(small) angle(vertical) valuelabel alternate) xtitle(Race) title(Obesity by Race)
+* INTERPRETATION: You can tell there are some patterns in differences of obesity rates by racial backgrounds.
 
 /* come back to this tabstat Avg_Housollars_adjusted_ Total_Nosurance_Coverage by(Zip) */
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
-
 /************************************/
 /*   RESULTS & SUGGESTED FINDINGS   */
 /************************************/
@@ -441,6 +435,12 @@ graph save "HousIncxZip" "/Users/kristinkelly/Documents/Academic/Rutgers/Classes
 * HYPOTHESIS 3) I expect lower income populations to have lower reports of annual check-ups.
 * FINDING: 
 
+*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
+/****************************/
+/*     FUTURE DIRECTIONS    */
+/****************************/
+
+*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 /************************/
 /*     SIDE ANALYSIS    */
 /************************/
@@ -457,7 +457,6 @@ drop if year!="2013-2017"
 rename county_name County
 list
 * creating a new variable to identify the different health statistics. this helps me drop rows I'm uninterested in before I reshape 
-
 replace topic="Cancer_DeathRate" if measure=="Cancer age-adjusted death rate per 100,000"
 replace topic="PregnancyRate_age15to17" if measure=="Reported pregnancy rate per 1,000 females age 15 to 17"
 replace topic="PregnancyRate_age18to19" if measure=="Reported pregnancy rate per 1,000 females age 18 to 19"
@@ -480,7 +479,6 @@ foreach var in rateCancer_DeathRate rateCoronaryHD_DeathRate rateDrugInduced_Dea
 }
 save phlHP2020, replace
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
-
 /******************/
 /*     VISUALS    */
 /******************/
@@ -498,16 +496,18 @@ graph save "HIVdeathxCounty", replace
 * INTERPRETATION: This pie chart illustrates that of all of the reported rates of HIV-related deaths in Bucks, Chester, Delaware, and Montgomery counties, that Philadelphia county accounts for nearly 60% of the HIV death rates in these Southeastern PA counties. These illustrative findings would suggest that the hypothesis regarding greater HIV-related deaths in Philadelphia county to be supported.
 
 graph pie rateStroke_DeathRate, over(County) plabel(_all percent, color(dknavy%80) size(vsmall)) intensity(inten90) title(Stroke Death Rates by County) legend(on) name(StrokeDeathsxCounty, replace)
-graph save "StrokeIndDeathxCounty", replace
-* INTERPRETATION: This pie chart illustrates that the reported rates of drug-induced deaths in Bucks, Chester, Delaware, and Montgomery counties were relatively similar in occurrence. Philadelphia, Delaware, and Bucks counties all account for roughly ~20% of drug-induced death rates in these Southeastern PA counties. It's possible that more research/data analysis regarding the opioid rates in these counties may contribute to an understanding of these findings. These illustrative findings would suggest that the hypothesis regarding higher drug-induced death rates in Philadelphia county are not supported.
-
+graph save "StrokeDeathxCounty", replace
+* INTERPRETATION: This pie chart illustrates that the reported rates of Stroke-induced deaths in Bucks, Chester, Delaware, and Montgomery counties were relatively similar in occurrence. Every county reported roughly the same proportions of deaths by Stroke. These illustrative findings suggest that the hypothesis regarding similar death rates by stroke in all five counties to be supported.
 
 graph pie rateSuicide_DeathRate, over(County) plabel(_all percent, color(dknavy%80) size(vsmall)) intensity(inten90) title(Suicide Rates by County) legend(on) name(SuicidexCounty, replace)
-* Interpretation: You can see that Philadelphia County has significantly more deaths due to homicide than any of the surrounding counties. You can also tell that suicide is reported almost equally across counties, which indicates that suicide rates transcend other health systems or social systems of an area.
+graph save "SuicidexCounty", replace
+* Interpretation: This pie chart illustrates that the reported rates of suicides in Bucks, Chester, Delaware, and Montgomery counties were relatively similar in occurrence. Every county reported roughly the same proportions of suicides. Surprisingly to me, Philadelphia county had the lowest proportion of suicide death rates as compared to the four other counties. These illustrative findings suggest that the hypothesis regarding similar suicide rates in all five counties to be supported.
 
-* Add in: more visuals, t-tests/ANOVAS, give stronger interpretations related back to hypotheses/research questions, add in tests/visuals of side demographics (elderly, etc) for more code
+graph pie rateCoronaryHD_DeathRate, over(County) plabel(_all percent, color(dknavy%80) size(vsmall)) intensity(inten90) title(Coronory Heart Disease Death Rates by County) legend(on) name(CordHDdeathxCounty, replace)
+graph save "CoronaryHDdeathxCounty", replace
+* Interpretation: This pie chart illustrates that the reported rates of death by coronary heart disease in Bucks, Chester, Delaware, and Montgomery counties were relatively similar in occurrence. Every county reported roughly the same proportions of suicides. Philadelphia county had slightly higher death rates by coronary heart disease as compared to the four other counties. But this could be explained by the various heart specialists/surgeries provided in the city context. These illustrative findings suggest that the hypothesis regarding similar coronary heart disease death rates in all five counties to be supported.
+
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
-
 /************************************/
 /*   RESULTS & SUGGESTED FINDINGS   */
 /************************************/
@@ -516,5 +516,12 @@ graph pie rateSuicide_DeathRate, over(County) plabel(_all percent, color(dknavy%
 * FINDING: The visual findings suggest that Philadelphia county does have higher rates of both homicide and HIV-related death. However, the sub-hypothesis suggesting Philadelphia county would have higher rates of drug-induced deaths was not supported.
 
 * HYPOTHESIS 5) I expect all of the counties will have similar death rates by cause of stroke, suicide, and coronary heart disease.
-* FINDING:
-*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
+* FINDING: The visual findings suggest that each of the five Southeastern PA counties have similar proportions of death rates by stroke, suicide, and coronary heart disease. 
+*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
+/*******************************************/
+/*   FUTURE DIRECTIONS FOR SIDE ANALYSES   */
+/*******************************************/
+* In the future I'd like to incorporate county health rankings into this dataset and look at more county-level comparisons beyond death rates. If future data availability allows, I'd also like to include the surrounding counties from New Jersey. 
+* Analyses-wise, I'd like to actually perform some statistical tests and create more visuals than the pie charts. They are helpful for this introductory/cursory look at the data, but they don't give enough information on their own.
+
+* Add in: t-tests/ANOVAS, give stronger interpretations related back to hypotheses/research questions, add in tests/visuals of side demographics (elderly, etc) for more code
