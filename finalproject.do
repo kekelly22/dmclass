@@ -6,8 +6,8 @@
 /******************/
 /*   HYPOTHESES   */
 /******************/
-* 1) I expect that rates of obesity, asthma and smoking will be higher in poorer areas of Philadelphia, as well as differ by racial identities.
-* 2) I expected that rates of healthcare access and insurance coverage will be lower for low income households.
+* 1) I expect that rates of obesity, asthma and smoking will be greater for poorer people.
+* 2) I expected that rates of healthcare access will be lower for low income households.
 *** I also expect that self-reported access to healthcare will be unrelated to health services available in that area.
 * 3) I expect lower income populations to have lower reports of annual check-ups.
 *~~~~~~~~~~~~~ Hypotheses for side analyses ~~~~~~~~~~~~~~~~~~
@@ -72,33 +72,28 @@ Last Updated: 2019 */
 /*******************/
 /*     CLEANING    */
 /*******************/
-/* sub
-mkdir ~\kristinkellyPS5
-cd ~\kristinkellyPS5 */
+mkdir ~\kristinkellyFinalProject
+cd ~\kristinkellyFinalProject
 
 * bringing in dataset #1: CDC 500 cities data (details above)
 insheet using "https://github.com/kekelly22/dmclass/blob/master/500cities.csv?raw=true", clear
 edit
 keep if placename=="Philadelphia"
 *376 observations left in dataset, data specific to Philadelphia
-
 /* the original data set provided one variable for a number string that included state, county, and tract codes. The following code breaks up that variable into three new var that will help me merge with other data sets with tract id later. */
 gen tract=substr(place_tractid,9,.)
 gen statecode=substr(tract,1,2)
 gen countycode=substr(tract,3,3)
 gen tractcode=substr(tract,6,.)
-
 * creating a loop to drop the unnecessary confidence interval variables
 foreach var of varlist *crude95ci placefips geolocation {
 drop `var'
 }
-
 * created a loop to replace any missing values with a .
 foreach var of varlist *crudeprev {
 replace `var'=. if `var'==-9
 }
 * 0 observations changed
-   
 rename access2_crudeprev access2hc
 rename bphigh_crudeprev highbp
 rename casthma_crudeprev asthma
@@ -112,7 +107,6 @@ rename stateabbr State
 * I realize that I could have used a loop to create uniform renames for above. But I needed them to be renamed in particular ways that didn't fit a pattern that's worth a loop. I also went through during this step and updated all of their labels.
 keep State placename tractfips population2010 access2hc highbp asthma ancheckup smoking dentalvis obesity pap mammo
 * I kept the relevant variables for my final data set exploring healthcare access and visits
-
 rename tractfips geoid /* this will be useful in future merges */
 save 500cities, replace
 * NOTE: after cleaning, this dataset has:
@@ -138,7 +132,6 @@ merge 1:1 geoid using ODP_censustracts
 *8 non-merges (from Census Tracts)
 drop if _merge!=3
 drop _merge
-
 rename latitude X
 rename longitude Y
 /* end of MERGE 1 */
@@ -247,7 +240,6 @@ order Zip
 save phl_HCmerge, replace
 collapse (count) Service, by(Zip)
 rename Service Num_HealthServiceProv
-
 * NOTE: after cleaning and collapsing, this dataset has:
 *** Geo-identifiers: Zip
 *** Health data: # of health service providers in 32 Zip codes
@@ -258,7 +250,6 @@ use master
 merge 1:m Zip using phl_HCmerge
 *15 non-merges - 15 of the total 47 Zip codes in the master set didn't have different types of healthcare providers in them.
 drop _merge
-
 * Not dropping the non-merges because it's still important to know which zip codes do not have healthcare providers in them
 replace Num_HealthServiceProv=0 if Num_HealthServiceProv==.
 rename geoid GeoID
@@ -275,11 +266,9 @@ save master, replace
 /* infile using "R12396925.dct", using("R12396925_SL140.txt")
 keep  FIPS NAME QName SUMLEV LOGRECNO STATE COUNTY TRACT GEOID A00001_001 A00002_002 A01001_002 A01001_003 A01001_004 A01001_005 A01001_006 A01001_007 A01001_008 A01001_009 A01001_010 A01001_011 A01001_012 A01001_013 A03001_002 A03001_003 A03001_004 A03001_005 A03001_006 A03001_007 A03001_008 A10025_001 A10010_001 A10010_002 A10010_003 A10010_004 A10010_005 A10010_006 A10010_007 A10010_008 A10010_009 A10010_010 A03001B_001 A03001B_002 A03001B_003 A03001B_004 A03001B_005 A03001B_006 A03001B_007 A03001B_008 A03001B_009 A03001B_010 A01003B_002 A01003B_003 A01003B_004 A01003B_005 A01003B_006 A01003B_007 A01003B_008 A01003B_009 A01003B_010 A14008_001 A14009_001 A14009_002 A14009_003 A14009_004 A14009_005 A14009_006 A14009_007 A14009_008 A14009_009 A14009_010 A13003B_001 A13003B_002 A13003B_003 B13004_001 B13004_002 B13004_003 B13004_004 B13004_005 A20001_001 A20001_002 A20001_003 A20001_004 A20001_005
 save phlCensus_SE, replace */
-
 use "https://github.com/kekelly22/dmclass/blob/master/phlCensus_SE.dta?raw=true", clear
 drop GEOID A03001B_009 A01001_003 A14009_010 QName SUMLEV LOGRECNO STATE COUNTY A01001_002 A01001_004 A01001_005 A01001_006 A01001_007 A01001_008 A01001_009 A10010_001 A10010_002 A10010_003 A10010_004 A10010_005 A10010_006 A10010_007 A10010_008  A10010_010 A03001B_001 A03001B_002 A03001B_003 A03001B_004 A03001B_005 A03001B_006 A03001B_007 A03001B_008 A03001B_010 A01003B_002 A01003B_003 A01003B_004 A01003B_005 A01003B_006 A01003B_007 A01003B_008 A01003B_009 A01003B_010 B13004_002 B13004_003 B13004_004 B13004_005 A20001_001 A10025_001 A00001_001 A00002_002 A14009_001 A13003B_001 A13003B_002 A13003B_003
 save phlCensus_SE, replace
-
 foreach v of varlist _all {
          local label : var label `v'
 		 local label1 = subinstr(`"`label'"', "Average", "Avg", .)
@@ -322,7 +311,6 @@ gen Pop_55over = TotalPop55to64Years+TotalPop65to74Years+TotalPop75to84Years+Tot
 drop TotalPop55to64Years TotalPop65to74Years TotalPop75to84Years TotalPop85YearsandOver
 order geoid GeoID TractName TractNum Pop_55over
 save phlCensus_SE, replace
-
 * NOTE: after cleaning, this dataset has:
 *** Geo-identifiers: geoid, tract name, tract number
 *** Health data: insurance coverage, insurance cov provider (public or private)
@@ -337,7 +325,6 @@ rename geoid GeoID_String
 drop _merge
 * end of MERGE 4 
 save master, replace
-
 * NOTE: after this merge, this dataset has:
 *** Geo-identifiers: geoid, X coord, Y coord, Zip, Address, City, State, tract name, tract number
 *** Health data: # of health service providers in 32 (of 47) Zip codes, % rates (for: access to healthcare, high blood pressure, asthma, people with regular annual check-ups, smoking, people with dental healthcare, people getting regular mammogram screenings, obesity, and people getting regular PAP tests), insurance coverage, insurance cov provider (public or private)
@@ -347,7 +334,6 @@ save master, replace
 * Bringing in dataset #9: City of Philadelphia's Neighborhood Food Retail (details above)
 insheet using "http://data-phl.opendata.arcgis.com/datasets/53b8a1c653a74c92b2de23a5d7bf04a0_0.csv", clear
 drop shape__area shape__length OBJECTID pct_hpss high_poverty
-
 la var hpss_access "Access to high-produce supply stores as either No Access, Low Access, or Moderate or High Access"
 la var hpss_per1000 "Number of high-produce supply stores per 1,000 people"
 la var lpss_per1000 "Number of low-produce supply stores per 1,000 people"
@@ -358,7 +344,6 @@ la var total_hpss "Total number of high-produce supply stores within a half mile
 la var total_restaurants "Number of restaurants, bars, and food trucks located within a block group	"
 la var total_lpss "Total number of low-produce supply stores within a half mile walking distance of the block group."
 la var supermarket_access "Binary indicator for whether or not the block group has a supermarket within a half mile walking distance." /* I used the metadata provided with this dataset to assign value labels with logical explanations of these unique acronyms */
-
 tostring geoid10, g(newg) format(%12.0f) /* the call to format prevents stata throwing an error*/
 replace newg = substr(newg, 1, 11) /*removed block-level data to merge this with all my other data */
 ta newg
@@ -386,7 +371,6 @@ save master, replace
 *** Health data: # of health service providers in 32 (of 47) Zip codes, % rates (for: access to healthcare, high blood pressure, asthma, people with regular annual check-ups, smoking, people with dental healthcare, people getting regular mammogram screenings, obesity, and people getting regular PAP tests), insurance coverage, insurance cov provider (public or private), low produce/high produce stores (# and percent per block), total restaurants (per block). total supermarkets (per block)
 *** Other: Population in 2010, Housing unit count, Population over 55yo, pop by race (white, black, native american/alaskan, asian, hawaiian/pacific islander, other races, multi-races), average household income, avg household inc by race, pop with poverty status, Access to vehicle, poverty level 
 **  
-
 order GeoID GeoID_String X Y Zip City State TractName TractNum HousUnitCount population2010 Pop_55over TotalPopWhiteAlone TotalPopBlack TotalPopNative TotalPopAsianAlone TotalPopHaw_PacIs TotalPopSomeOtherRaceAlone TotalPopTwoMeRaces TotalPopHispLat AvgHousInc_ AvgHousInc_WhiteAloneHouse AvgHousInc_BlackAfrican AvgHousInc_AmericanIndiana AvgHousInc_AsianAloneDoll AvgHousInc_NativeHawaiiana AvgHousInc_SomeOtherRaceA AvgHousInc_TwoMeRaces AvgHousInc_HispanicLatin Pop18to64_Poverty TotalNoHealthInsCov TotalwithHealthInsCov Pop_PublHInsCov Pop_PrivHInsCov /* re-ordering my variables to be arranged from geo-identifiers to more demographic stats to health info. */
 replace City = "Philadelphia"
 replace State = "PA"
@@ -400,7 +384,7 @@ use master
 correlate access2hc Num_HealthServiceProv /* This correlation indicates a mild, positive correlation ~~(r = 0.2067)~~ */
 twoway(scatter access2hc Num_HealthServiceProv) (lfit access2hc Num_HealthServiceProv) /* This visual isn't very visually appealing due to the discrete variables, but it does illustrate some of the positive correlation that the correlation test above indicated. */
 graph save "Access2HCxNumHCServ", replace
-* Interpretation: While a correlation cannot indicate cause, the positive correlation between number of health services and access to healthcare suggests that there is a relationship between surrounding services and access to healthcare. It could also be that the areas with more health services are wealthier areas and therefore have greater access to healthcare regardless of the # of services.
+* Interpretation: While a correlation cannot indicate cause, the positive correlation between number of health services and access to healthcare suggests that there is a relation between surrounding services and access to healthcare. It could also be that the areas with more health services are wealthier areas and therefore have greater access to healthcare regardless of the # of services.
 
 graph hbar (mean) access2hc, over(Zip, label(labsize(tiny))) ytitle(Access to Healthcare) title(Access to Healthcare by Zip) name(Ac2HCxZip, replace)
 graph save "Ac2HCxZip", replace
@@ -420,33 +404,39 @@ graph save "HousIncxZip", replace
 
 * Graphing a scatter plot of obesity rates by racial populations
 twoway (scatter obesity TotalPopWhiteAlone TotalPopBlack TotalPopNative TotalPopAsianAlone TotalPopHaw_PacIs TotalPopSomeOtherRaceAlone TotalPopTwoMeRaces TotalPopHispLat), ytitle(Obesity) ylabel(0(1000)7000, labsize(small) angle(vertical) valuelabel alternate) xtitle(Race) title(Obesity by Race)
-* INTERPRETATION: You can tell there are some patterns in differences of obesity rates by racial backgrounds.
+graph save "ObesityxRace", replace
+* Interpreation: You can tell there are some patterns in differences of obesity rates by racial backgrounds.
 
 tabstat TotalNoHealthInsCov TotalwithHealthInsCov Pop_PublHInsCov Pop_PrivHInsCov, by(Zip)
 * Interpretation: This table illustrates that, on average, only about 9.3% of people living in Philadelphia (and surveryed) do NOT have health insurance of some kind. An approximate total of 3409 people reported having health insurance, including about 66% of those people having private health insurance providers.
 
 tabstat asthma smoking obesity, by(AvgHousInc_)
 graph dot (mean) obesity (mean) smoking (mean) asthma, over(AvgHousInc_, label(labsize(tiny))) nofill exclude0 cw ytitle(Health Factors) ylabel(, labsize(vsmall)) title(Health Factors by Income)
+graph save "HealthFacxAvgHousInc", replace
+* Interpretation: This graph illustrates that prevalence rates of obesity, asthma, and smoking all increase for poorer households. These results are what existing literature would typically expect, especially known literature on the obesity epidemic that suggest that lower income families can't financially access nutritious food. 
 
-* Interpretation: 
+graph dot (mean) access2hc, over(AvgHousInc_, label(labsize(tiny))) nofill exclude0 cw ytitle(Access to Healthcare) ylabel(, labsize(vsmall)) title(Access to Healthcare by Income)
+graph save "Ac2HCxAvgHousInc", replace
+* Interpretation: This visual suggests rather counterintuitive findings in my opinion because it reflects that lower household incomes follow a pattern of increased access to healthcare. This requires further analyses and exploration.
+
+correlate ancheckup AvgHousInc_ /* This correlation indicates a mild, negative correlation ~~(r = -0.2997)~~ */
+twoway(scatter ancheckup AvgHousInc_) (lfit ancheckup AvgHousInc_) /* This visual isn't very visually appealing due to the discrete variables, but it does illustrate some of the negative correlation that the correlation test above indicated. */
+graph save "AnCheckxAvgHousInc", replace
+* Interpretation: The mild, negative correlation between average household income and annual check-ups suggests that there is not support for the hypothesis that poorer individuals report less attendance to annual health check-ups. This suggests that lower income households are more likely to attend annual check-ups as compared to higher-income households.
+
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 /************************************/
 /*   RESULTS & SUGGESTED FINDINGS   */
 /************************************/
-* HYPOTHESIS 1) I expect that rates of obesity, asthma and smoking will be higher in poorer areas of Philadelphia, as well as differ by racial identities.
-* FINDING: 
+* HYPOTHESIS 1) I expect that rates of obesity, asthma and smoking will be greater for poorer people.
+* FINDING: This hypothesis was visually assessed (in visual "HealthFacxAvgHousInc") and had suggestive findings to support the hypothesis that rates of obesity, asthma, and smoking were higher for poorer individuals.
 
-* HYPOTHESIS 2) I expected that rates of healthcare access and insurance coverage will be lower for low income households.
+* HYPOTHESIS 2) I expect that rates of healthcare access will be lower for low income households.
 *** I also expect that self-reported access to healthcare will be unrelated to health services available in that area.
-* FINDING:
+* FINDING: This hypothesis did not receive report in visual explorations. In the visuals ("Ac2HCxZip" and "Ac2HCxAvgHousInc"), the results suggested that income was unrelated to access to healthcare. This requires further review of the master data criteria and analyses of the significance. 
 
 * HYPOTHESIS 3) I expect lower income populations to have lower reports of annual check-ups.
-* FINDING: 
-
-*~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
-/****************************/
-/*     FUTURE DIRECTIONS    */
-/****************************/
+* FINDING: This hypothesis was visually assessed (in visual "AnCheckxAvgHousInc") and did not appear to support the hypothesis. The visual suggests that lower income households are more likely to attend annual check-ups as compared to higher-income households.
 
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 /************************/
@@ -511,7 +501,7 @@ graph pie rateSuicide_DeathRate, over(County) plabel(_all percent, color(dknavy%
 graph save "SuicidexCounty", replace
 * Interpretation: This pie chart illustrates that the reported rates of suicides in Bucks, Chester, Delaware, and Montgomery counties were relatively similar in occurrence. Every county reported roughly the same proportions of suicides. Surprisingly to me, Philadelphia county had the lowest proportion of suicide death rates as compared to the four other counties. These illustrative findings suggest that the hypothesis regarding similar suicide rates in all five counties to be supported.
 
-graph pie rateCoronaryHD_DeathRate, over(County) plabel(_all percent, color(dknavy%80) size(vsmall)) intensity(inten90) title(Coronory Heart Disease Death Rates by County) legend(on) name(CordHDdeathxCounty, replace)
+graph pie rateCoronaryHD_DeathRate, over(County) plabel(_all percent, color(dknavy%80) size(vsmall)) intensity(inten90) title(Coronary Heart Disease Death Rates by County) legend(on) name(CordHDdeathxCounty, replace)
 graph save "CoronaryHDdeathxCounty", replace
 * Interpretation: This pie chart illustrates that the reported rates of death by coronary heart disease in Bucks, Chester, Delaware, and Montgomery counties were relatively similar in occurrence. Every county reported roughly the same proportions of suicides. Philadelphia county had slightly higher death rates by coronary heart disease as compared to the four other counties. But this could be explained by the various heart specialists/surgeries provided in the city context. These illustrative findings suggest that the hypothesis regarding similar coronary heart disease death rates in all five counties to be supported.
 
@@ -524,12 +514,10 @@ graph save "CoronaryHDdeathxCounty", replace
 * FINDING: The visual findings suggest that Philadelphia county does have higher rates of both homicide and HIV-related death. However, the sub-hypothesis suggesting Philadelphia county would have higher rates of drug-induced deaths was not supported.
 
 * HYPOTHESIS 5) I expect all of the counties will have similar death rates by cause of stroke, suicide, and coronary heart disease.
-* FINDING: The visual findings suggest that each of the five Southeastern PA counties have similar proportions of death rates by stroke, suicide, and coronary heart disease. 
+* FINDING: The visual findings suggest that each of the five Southeastern PA counties have similar reports of death rates by stroke, suicide, and coronary heart disease. 
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 /*******************************************/
 /*   FUTURE DIRECTIONS FOR SIDE ANALYSES   */
 /*******************************************/
 * In the future I'd like to incorporate county health rankings into this dataset and look at more county-level comparisons beyond death rates. If future data availability allows, I'd also like to include the surrounding counties from New Jersey. 
 * Analyses-wise, I'd like to actually perform some statistical tests and create more visuals than the pie charts. They are helpful for this introductory/cursory look at the data, but they don't give enough information on their own.
-
-* Add in: t-tests/ANOVAS, give stronger interpretations related back to hypotheses/research questions, add in tests/visuals of side demographics (elderly, etc) for more code
