@@ -110,12 +110,10 @@ rename paptest_crudeprev pap
 rename mammouse_crudeprev mammo
 rename stateabbr State
 * I realize that I could have used a loop to create uniform renames for above. But I needed them to be renamed in particular ways that didn't fit a pattern that's worth a loop. I also went through during this step and updated all of their labels.
-
 keep State placename tractfips population2010 access2hc highbp asthma ancheckup smoking dentalvis obesity pap mammo
 * I kept the relevant variables for my final data set exploring healthcare access and visits
 
 rename tractfips geoid /* this will be useful in future merges */
-
 save 500cities, replace
 * NOTE: after cleaning, this dataset has:
 *** Geo-identifiers: State, City, Tract, geoID
@@ -146,7 +144,6 @@ rename longitude Y
 /* end of MERGE 1 */
 * The purpose of this merge was to take the prevalence rates of major health factors (from my data set of 500 cities) and add in geographic identifiers with tract id and coordinates. This is intended to make my data more geographically rich for future merges with other geoID data files.
 save cdcTractMerge, replace
-
 * NOTE: this merged dataset has:
 *** Geo-identifiers: State, City, Tract, geoid, X coord, Y coord
 *** Health factors: % rates for access to healthcare, high blood pressure, asthma, people with regular annual check-ups, smoking, people with dental healthcare, people getting regular mammogram screenings, obesity, and people getting regular PAP tests
@@ -175,6 +172,7 @@ drop if _merge!=3
 drop _merge
 rename placename City
 save master, replace
+/* end of MERGE 2 */
 
 /**** For the following datasets (#3, 4, 5) I am cleaning and appending to make one bigger dataset with the combined data involving the locations of health locations in Philadelphia ***** */
 * bringing in dataset #3: List of Philly hospitals and locations by zip, address, and XY coordinates
@@ -398,29 +396,39 @@ save master, replace
 /*     TESTS & VISUALS    */
 /**************************/
 use master
-* Producing a correlation of access to healthcare and the # of healthcare providers by zip code. The idea of this test is 
+* Producing a correlation of access to healthcare and the # of healthcare providers by zip code.
 correlate access2hc Num_HealthServiceProv /* This correlation indicates a mild, positive correlation ~~(r = 0.2067)~~ */
 twoway(scatter access2hc Num_HealthServiceProv) (lfit access2hc Num_HealthServiceProv) /* This visual isn't very visually appealing due to the discrete variables, but it does illustrate some of the positive correlation that the correlation test above indicated. */
 graph save "Access2HCxNumHCServ", replace
 * Interpretation: While a correlation cannot indicate cause, the positive correlation between number of health services and access to healthcare suggests that there is a relationship between surrounding services and access to healthcare. It could also be that the areas with more health services are wealthier areas and therefore have greater access to healthcare regardless of the # of services.
 
 graph hbar (mean) access2hc, over(Zip, label(labsize(tiny))) ytitle(Access to Healthcare) title(Access to Healthcare by Zip) name(Ac2HCxZip, replace)
-graph save "Ac2HCxZip" "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/New/Ac2HCxZip.gph", replace
+graph save "Ac2HCxZip", replace
+* Interpretation: This bar graph shows the prevalence rates of self-reported access to healthcare by zip codes in the City of Philadelphia. It appears that, on average, about 15% of the population of each zip code report having access to healthcare. Zip code 19134 reported the highest average, with about 35% of the zip's population reporting access to healthcare. This may be explained by that zip code being an area, called "Port Richmond", that consists of a younger demographic that may still utilize familial health coverage. The zipcodes of 19118 (subset of Chestnut Hill), 19146(includes areas called Point Breeze and Gray's Ferry), and 19147(includes areas called Bella Vista and Wharton) reported the lowest average reports of access to health care. I suspect that 19118 is a low average due to the large portion of the zipcode that makes up Wissahickon State Park, therefore being primarily non-residential. It's possibly that the age and income demographics of the neighborhoods including in zipcodes 19146 and 19147 explain their lower reports of access to healthcare.
 
 graph hbar (mean) Num_HealthServiceProv, over(Zip, label(labsize(tiny))) ytitle(Number of Health Service Providers) title(Number of Health Service Provider by Zip) name(Ac2HCxZip, replace)
-graph save "Ac2HCxZip" "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/New/NumHCPxZip.gph", replace
+graph save "NumHCServxZip", replace
+* Interpretation: This bar graph shows the number of healthcare service centers in each zip code of the city of Philadelphia. When compared to the former graph ("Ac2HCxZip"), we can see that the number of services provided in each zip code do not appear to substantially match the self-reports of access to health care. The zip code containing the most health care services providers is, unsurprisingly, 19104 in West Philadelphia. This neighborhood contains a lot of services particularly due to the medical campuses of Drexel and Penn.
 
 graph hbar (mean) HousUnitCount, over(Zip, label(labsize(tiny))) ytitle(Housing Unit (count)) title(Housing Unit Count by Zip) name(HousCountxZip, replace)
-graph save "HousCountxZip" "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/NewHousCountxZip.gph", replace
+graph save "HousCountxZip", replace
+* Interpretation: This bar graph shows the breakdown of housing units in each zip code of the city of Philadelphia. The highest three zip codes- 19143 (includes area of West Philly), 19111 (includes area of Northeast Philly), and 19124 (includes area of North Philly)- include a much more residential area of the city. 
 
-graph hbar (mean) Avg_Housollars_adjusted_, over(Zip, label(labsize(tiny))) ytitle(Average Household Income) title(Household Income by Zip) name(HousIncxZip, replace)
-graph save "HousIncxZip" "/Users/kristinkelly/Documents/Academic/Rutgers/Classes/Fall19/DataManagement/HouseIncxZip.gph", replace
+graph hbar (mean) AvgHousInc_, over(Zip, label(labsize(tiny))) ytitle(Average Household Income) title(Household Income by Zip) name(HousIncxZip, replace)
+graph save "HousIncxZip", replace
+* Interpreation: This bar graph illustrates the various household incomes by zip codes in the city of Philadelphia. This grpah somewhat contrasts against the former graph ("Ac2HCxZip") because the same zip codes that reported the lowest averages of access to healthcare are the same zip codes with the highest household incomes. Chestnut Hill (zip = 19118) makes sense as high income due to the demographics of the area. I'd need to futher explore why the zipcodes for 19146 and 19147 reported low access to health care.
 
 * Graphing a scatter plot of obesity rates by racial populations
 twoway (scatter obesity TotalPopWhiteAlone TotalPopBlack TotalPopNative TotalPopAsianAlone TotalPopHaw_PacIs TotalPopSomeOtherRaceAlone TotalPopTwoMeRaces TotalPopHispLat), ytitle(Obesity) ylabel(0(1000)7000, labsize(small) angle(vertical) valuelabel alternate) xtitle(Race) title(Obesity by Race)
 * INTERPRETATION: You can tell there are some patterns in differences of obesity rates by racial backgrounds.
 
-/* come back to this tabstat Avg_Housollars_adjusted_ Total_Nosurance_Coverage by(Zip) */
+tabstat TotalNoHealthInsCov TotalwithHealthInsCov Pop_PublHInsCov Pop_PrivHInsCov, by(Zip)
+* Interpretation: This table illustrates that, on average, only about 9.3% of people living in Philadelphia (and surveryed) do NOT have health insurance of some kind. An approximate total of 3409 people reported having health insurance, including about 66% of those people having private health insurance providers.
+
+tabstat asthma smoking obesity, by(AvgHousInc_)
+graph dot (mean) obesity (mean) smoking (mean) asthma, over(AvgHousInc_, label(labsize(tiny))) nofill exclude0 cw ytitle(Health Factors) ylabel(, labsize(vsmall)) title(Health Factors by Income)
+
+* Interpretation: 
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 /************************************/
 /*   RESULTS & SUGGESTED FINDINGS   */
