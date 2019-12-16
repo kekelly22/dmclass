@@ -374,12 +374,27 @@ save master, replace
 order GeoID GeoID_String X Y Zip City State TractName TractNum HousUnitCount population2010 Pop_55over TotalPopWhiteAlone TotalPopBlack TotalPopNative TotalPopAsianAlone TotalPopHaw_PacIs TotalPopSomeOtherRaceAlone TotalPopTwoMeRaces TotalPopHispLat AvgHousInc_ AvgHousInc_WhiteAloneHouse AvgHousInc_BlackAfrican AvgHousInc_AmericanIndiana AvgHousInc_AsianAloneDoll AvgHousInc_NativeHawaiiana AvgHousInc_SomeOtherRaceA AvgHousInc_TwoMeRaces AvgHousInc_HispanicLatin Pop18to64_Poverty TotalNoHealthInsCov TotalwithHealthInsCov Pop_PublHInsCov Pop_PrivHInsCov /* re-ordering my variables to be arranged from geo-identifiers to more demographic stats to health info. */
 replace City = "Philadelphia"
 replace State = "PA"
+la var obesity "Prevalence of Obesity (by BMI)"
+la var asthma "Prevalence of Asthma"
+la var smoking "Prevalence of Smoking"
 save master, replace
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 /**************************/
 /*     TESTS & VISUALS    */
 /**************************/
 use master
+twoway (histogram obesity, fcolor(maroon%65) lcolor(cranberry%85) lalign(center) gap(3)), xlabel(, labsize(vsmall) alternate)
+graph save "Hist_Obesity", replace
+twoway (histogram asthma, fcolor(maroon%65) lcolor(cranberry%85) lalign(center) gap(3)), xlabel(, labsize(vsmall) alternate)
+graph save "Hist_Asthma", replace
+twoway (histogram smoking, fcolor(maroon%65) lcolor(cranberry%85) lalign(center) gap(3)), xlabel(, labsize(vsmall) alternate)
+graph save "Hist_Smoking", replace
+twoway (histogram access2hc, fcolor(maroon%65) lcolor(cranberry%85) lalign(center) gap(3)), xlabel(, labsize(vsmall) alternate)
+graph save "Hist_Ac2HC", replace
+twoway (histogram highbp, fcolor(maroon%65) lcolor(cranberry%85) lalign(center) gap(3)), xlabel(, labsize(vsmall) alternate)
+graph save "Hist_HighBP", replace
+* These histograms provide some insight to the general distributions of prevalence rates of these major health factors in this dataset and population. 
+
 * Producing a correlation of access to healthcare and the # of healthcare providers by zip code.
 correlate access2hc Num_HealthServiceProv /* This correlation indicates a mild, positive correlation ~~(r = 0.2067)~~ */
 twoway(scatter access2hc Num_HealthServiceProv) (lfit access2hc Num_HealthServiceProv) /* This visual isn't very visually appealing due to the discrete variables, but it does illustrate some of the positive correlation that the correlation test above indicated. */
@@ -409,6 +424,8 @@ graph save "ObesityxRace", replace
 
 tabstat TotalNoHealthInsCov TotalwithHealthInsCov Pop_PublHInsCov Pop_PrivHInsCov, by(Zip)
 * Interpretation: This table illustrates that, on average, only about 9.3% of people living in Philadelphia (and surveryed) do NOT have health insurance of some kind. An approximate total of 3409 people reported having health insurance, including about 66% of those people having private health insurance providers.
+graph pie TotalNoHealthInsCov TotalwithHealthInsCov, plabel(_all percent, color(dknavy%80) size(vsmall)) intensity(inten90) title(Health Insurance Coverage Rates) legend(on) name(HealthInsCovRates, replace)
+graph save "HealthInsCovRates", replace /* This pie chart supports the breakdown provided above. */
 
 tabstat asthma smoking obesity, by(AvgHousInc_)
 graph dot (mean) obesity (mean) smoking (mean) asthma, over(AvgHousInc_, label(labsize(tiny))) nofill exclude0 cw ytitle(Health Factors) ylabel(, labsize(vsmall)) title(Health Factors by Income)
@@ -419,11 +436,17 @@ graph dot (mean) access2hc, over(AvgHousInc_, label(labsize(tiny))) nofill exclu
 graph save "Ac2HCxAvgHousInc", replace
 * Interpretation: This visual suggests rather counterintuitive findings in my opinion because it reflects that lower household incomes follow a pattern of increased access to healthcare. This requires further analyses and exploration.
 
+graph pie AvgHousInc_WhiteAloneHouse AvgHousInc_BlackAfrican AvgHousInc_AmericanIndiana AvgHousInc_AsianAloneDoll AvgHousInc_NativeHawaiiana AvgHousInc_SomeOtherRaceA AvgHousInc_TwoMeRaces AvgHousInc_HispanicLatin, plabel(_all percent, color(dknavy%80) size(vsmall)) intensity(inten90) title(Average Household Incomes by Race) legend(on) name(Race, replace)
+graph save "AvgHousIncxRace", replace
+* Interpretation: This graph shows the average breakdown of household incomes proportionally to racial idendities. In the city of Philadelphia, nearly 50% of all household incomes are made by White and Black households. 
+
 correlate ancheckup AvgHousInc_ /* This correlation indicates a mild, negative correlation ~~(r = -0.2997)~~ */
 twoway(scatter ancheckup AvgHousInc_) (lfit ancheckup AvgHousInc_) /* This visual isn't very visually appealing due to the discrete variables, but it does illustrate some of the negative correlation that the correlation test above indicated. */
 graph save "AnCheckxAvgHousInc", replace
 * Interpretation: The mild, negative correlation between average household income and annual check-ups suggests that there is not support for the hypothesis that poorer individuals report less attendance to annual health check-ups. This suggests that lower income households are more likely to attend annual check-ups as compared to higher-income households.
 
+graph bar (mean) total_restaurants, over(Zip, label(labsize(tiny) alternate)) nofill exclude0 cw ytitle(# of Restaurants) ylabel(, labsize(tiny)) title(# of Restaurants by Zip Code) name(RestaxZip, replace)
+graph save "RestaxZip", replace
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 /************************************/
 /*   RESULTS & SUGGESTED FINDINGS   */
