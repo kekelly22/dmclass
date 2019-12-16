@@ -447,6 +447,12 @@ graph save "AnCheckxAvgHousInc", replace
 
 graph bar (mean) total_restaurants, over(Zip, label(labsize(tiny) alternate)) nofill exclude0 cw ytitle(# of Restaurants) ylabel(, labsize(tiny)) title(# of Restaurants by Zip Code) name(RestaxZip, replace)
 graph save "RestaxZip", replace
+
+graph bar (mean) total_hpss, over(Zip, label(labsize(tiny) alternate)) nofill exclude0 cw ytitle(# of High Produce Stores) ylabel(, labsize(tiny)) title(# of High Produce Stores by Zip Code) name(HPstoresxZip, replace)
+graph save "HPstoresxZip", replace
+graph bar (mean) total_lpss, over(Zip, label(labsize(tiny) alternate)) nofill exclude0 cw ytitle(# of Low Produce Stores) ylabel(, labsize(tiny)) title(# of Low Produce Stores by Zip Code) name(LPstoresxZip, replace)
+graph save "LPstoresxZip", replace
+* Interpretation: You can see the different zips that have more high-produce (high-quality) grocery stores are slightly off-balanced by different zips that have more low-produce grocery stores.
 *~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~ ---------------------------- ~~~~~~~~~~~~~~~~~~
 /************************************/
 /*   RESULTS & SUGGESTED FINDINGS   */
